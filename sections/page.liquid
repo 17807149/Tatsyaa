@@ -1,13 +1,23 @@
 {% comment %}
   This section is used in the page template to render store pages like About us
-  or Contact us.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/page
+  or Contact us. It includes a smart dynamic router that automatically loads 
+  Tatsyaa custom layouts for about-us and contact-us pages for instant premium rendering.
 {% endcomment %}
 
-<h1>{{ page.title }}</h1>
-
-{{ page.content }}
+{% if page.handle == 'about-us' or page.handle == 'about' or page.handle == 'our-story' %}
+  {% section 'about-us' %}
+{% elsif page.handle == 'contact' or page.handle == 'contact-us' or page.handle == 'get-in-touch' %}
+  {% section 'contact-us' %}
+{% else %}
+  <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 text-left">
+    <h1 class="text-headline-lg md:text-[38px] font-normal text-[#5a000c] mb-6" style="font-family: 'Noto Serif', serif;">
+      {{ page.title }}
+    </h1>
+    <div class="prose max-w-none text-body-md text-secondary leading-relaxed font-light" style="font-family: 'Manrope', sans-serif;">
+      {{ page.content }}
+    </div>
+  </section>
+{% endif %}
 
 {% schema %}
 {
