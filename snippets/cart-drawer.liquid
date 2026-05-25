@@ -185,7 +185,7 @@
     const backdrop = document.getElementById('TatsyaaCartBackdrop');
     
     // Bind main navigation menu shopping bag icon as well
-    const menuCartBtns = document.querySelectorAll('a[href="/cart"], button[aria-label="Shopping Bag"]');
+    const menuCartBtns = document.querySelectorAll('a[href="/cart"], [aria-label="Shopping Bag"]');
     
     const openCartDrawer = (e) => {
       if (e) e.preventDefault();
