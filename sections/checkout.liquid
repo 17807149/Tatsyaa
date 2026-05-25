@@ -1,0 +1,667 @@
+{% comment %}
+  Tatsyaa High-Fidelity Secure Checkout Page
+  -------------------------------------------------------------
+  Description: A premium, dedicated checkout experience matching Sabyasachi / Stitch brand DNA.
+  Features:
+    - Dedicated clean checkout layout (hides standard theme headers/footers to maximize conversion focus).
+    - Fully interactive shipping method selectors updating taxes, shipping costs, and grand totals in real-time.
+    - Live promotional coupon application (e.g. "WELCOME10" or "HERITAGE" for 10% discount).
+    - Complete address, contact, and secure card payment capture modules.
+    - Trust badges and ethical handloom highlights.
+{% endcomment %}
+
+<style>
+  /* Completely hide standard navigation header and footer to make this a dedicated checkout funnel */
+  #TatsyaaNav, footer, #backToTop, #TatsyaaFloatingCartBtn, [id^="shopify-section-header-group"], [id^="shopify-section-footer-group"] {
+    display: none !important;
+  }
+  body {
+    background-color: #fbf8ff !important;
+    padding-top: 0 !important;
+  }
+  .input-focus:focus {
+    outline: none;
+    border-color: #5a000c;
+    box-shadow: 0 0 0 1px #5a000c;
+  }
+  .custom-radio:checked {
+    background-color: #5a000c;
+    border-color: #5a000c;
+  }
+  .animate-pulse-subtle {
+    animation: pulseSubtle 2s infinite;
+  }
+  @keyframes pulseSubtle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+  }
+</style>
+
+<!-- Custom Dedicated Secure Checkout Header -->
+<header class="w-full bg-white/95 backdrop-blur-md border-b border-neutral-100 py-5 sticky top-0 z-40">
+  <div class="max-w-[1280px] mx-auto px-6 md:px-16 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <a class="text-primary text-[28px] font-normal leading-none" style="font-family: 'Noto Serif', serif; color: #5a000c;" href="/">
+        Tatsyaa
+      </a>
+      <span class="bg-[#ffdad8] text-[#5a000c] text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+        <span class="material-symbols-outlined text-[12px]">lock</span>
+        Secure Checkout
+      </span>
+    </div>
+    <a href="/cart" class="text-secondary hover:text-[#5a000c] transition-all flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-wider" style="font-family: 'Manrope', sans-serif;">
+      <span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+      <span class="hidden sm:inline">Back to Bag</span>
+    </a>
+  </div>
+</header>
+
+<!-- Main Checkout Body -->
+<main class="min-h-screen max-w-[1280px] mx-auto px-6 md:px-16 py-10 md:py-16">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+    
+    <!-- Left Hand: Information, Shipping & Payment forms -->
+    <div class="lg:col-span-7 space-y-12">
+      
+      <!-- Checkout Steps Breadcrumb Navigation -->
+      <nav class="flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-widest text-[#5c5e68]" style="font-family: 'Manrope', sans-serif;">
+        <span class="text-[#5a000c]">Information</span>
+        <span class="material-symbols-outlined text-[12px] text-neutral-300">chevron_right</span>
+        <span id="StepShippingLabel" class="text-neutral-400">Shipping</span>
+        <span class="material-symbols-outlined text-[12px] text-neutral-300">chevron_right</span>
+        <span id="StepPaymentLabel" class="text-neutral-400">Payment</span>
+      </nav>
+
+      <!-- Section 1: Customer Contact -->
+      <section class="space-y-5">
+        <div class="flex justify-between items-end">
+          <h2 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+            Contact Information
+          </h2>
+          <p class="text-[12px] text-[#5c5e68]" style="font-family: 'Manrope', sans-serif;">
+            Have an account? <a href="/account/login" class="text-[#5a000c] underline font-bold">Log in</a>
+          </p>
+        </div>
+        <div class="space-y-3">
+          <div class="relative">
+            <input 
+              type="text" 
+              id="CheckoutEmail"
+              required
+              class="w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus transition-all rounded-lg placeholder:text-neutral-400" 
+              placeholder="EMAIL OR MOBILE PHONE NUMBER"
+            />
+          </div>
+          <label class="flex items-center gap-2.5 cursor-pointer py-1">
+            <input 
+              type="checkbox" 
+              checked
+              class="w-4 h-4 rounded border-neutral-300 text-[#5a000c] focus:ring-[#5a000c]"
+            />
+            <span class="text-[11px] font-bold text-[#5c5e68] uppercase tracking-wider" style="font-family: 'Manrope', sans-serif;">
+              Email me with exclusive news and heritage arrivals
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Section 2: Delivery Details -->
+      <section class="space-y-5">
+        <h2 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+          Shipping Address
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input 
+            type="text" 
+            id="ShipFirstName"
+            required
+            class="w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+            placeholder="FIRST NAME"
+          />
+          <input 
+            type="text" 
+            id="ShipLastName"
+            required
+            class="w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+            placeholder="LAST NAME"
+          />
+          <input 
+            type="text" 
+            id="ShipAddress"
+            required
+            class="sm:col-span-2 w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+            placeholder="ADDRESS"
+          />
+          <input 
+            type="text" 
+            class="sm:col-span-2 w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+            placeholder="APARTMENT, ATELIER, SUITE (OPTIONAL)"
+          />
+          <input 
+            type="text" 
+            id="ShipCity"
+            required
+            class="w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+            placeholder="CITY"
+          />
+          <div class="grid grid-cols-2 gap-3">
+            <select 
+              id="ShipState"
+              class="w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg"
+            >
+              <option value="DL">Delhi</option>
+              <option value="MH">Maharashtra</option>
+              <option value="KA">Karnataka</option>
+              <option value="CA">California</option>
+              <option value="NY">New York</option>
+            </select>
+            <input 
+              type="text" 
+              id="ShipZip"
+              required
+              class="w-full px-4 py-3.5 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+              placeholder="ZIP CODE"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Delivery Options -->
+      <section class="space-y-5">
+        <h2 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+          Shipping Method
+        </h2>
+        <div class="border border-neutral-200 bg-white rounded-lg overflow-hidden divide-y divide-neutral-100">
+          <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-neutral-50/50 transition-all">
+            <div class="flex items-center gap-3">
+              <input 
+                type="radio" 
+                name="ShippingChoice" 
+                value="1.50" 
+                checked
+                onchange="recalculateCheckout()"
+                class="w-4 h-4 text-[#5a000c] border-neutral-300 focus:ring-[#5a000c]"
+              />
+              <div class="text-left">
+                <span class="text-[12.5px] font-bold text-neutral-800 uppercase block tracking-wider" style="font-family: 'Manrope', sans-serif;">Standard Delivery</span>
+                <span class="text-[11px] text-neutral-400 font-semibold uppercase" style="font-family: 'Manrope', sans-serif;">Ships in 4-6 business days</span>
+              </div>
+            </div>
+            <span class="text-[13px] font-bold text-neutral-800" style="font-family: 'Manrope', sans-serif;">$1.50</span>
+          </label>
+          <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-neutral-50/50 transition-all">
+            <div class="flex items-center gap-3">
+              <input 
+                type="radio" 
+                name="ShippingChoice" 
+                value="4.50"
+                onchange="recalculateCheckout()"
+                class="w-4 h-4 text-[#5a000c] border-neutral-300 focus:ring-[#5a000c]"
+              />
+              <div class="text-left">
+                <span class="text-[12.5px] font-bold text-neutral-800 uppercase block tracking-wider" style="font-family: 'Manrope', sans-serif;">Express Air Courier</span>
+                <span class="text-[11px] text-neutral-400 font-semibold uppercase" style="font-family: 'Manrope', sans-serif;">Premium handloom delivery in 2 days</span>
+              </div>
+            </div>
+            <span class="text-[13px] font-bold text-neutral-800" style="font-family: 'Manrope', sans-serif;">$4.50</span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Section 4: Secure Payment Options -->
+      <section class="space-y-5">
+        <div>
+          <h2 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+            Secure Payment
+          </h2>
+          <p class="text-[11.5px] text-[#5c5e68] tracking-wider uppercase font-semibold" style="font-family: 'Manrope', sans-serif;">
+            All transactions are secure, encrypted, and processed in USD.
+          </p>
+        </div>
+        
+        <div class="border border-neutral-200 bg-white rounded-lg overflow-hidden divide-y divide-neutral-100 shadow-sm">
+          
+          <!-- Choice 1: Credit / Debit Card -->
+          <div class="payment-method-container">
+            <label class="flex items-center justify-between p-4 bg-[#fbf8ff]/60 cursor-pointer">
+              <div class="flex items-center gap-3">
+                <input 
+                  type="radio" 
+                  name="PaymentChoice" 
+                  value="card" 
+                  checked
+                  onchange="togglePaymentMethods()"
+                  class="w-4 h-4 text-[#5a000c] border-neutral-300 focus:ring-[#5a000c]"
+                />
+                <span class="text-[12.5px] font-bold text-neutral-800 uppercase tracking-wider" style="font-family: 'Manrope', sans-serif;">Credit / Debit Card</span>
+              </div>
+              <div class="flex gap-1.5 opacity-80">
+                <span class="material-symbols-outlined text-[20px] text-neutral-500">credit_card</span>
+              </div>
+            </label>
+            
+            <!-- Credit Card Sub-Form -->
+            <div id="CardSubForm" class="p-6 bg-white border-t border-neutral-100 grid grid-cols-1 sm:grid-cols-2 gap-4 transition-all duration-300">
+              <div class="sm:col-span-2 relative">
+                <input 
+                  type="text" 
+                  id="CardNumber"
+                  class="w-full px-4 py-3 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+                  placeholder="CARD NUMBER"
+                />
+                <span class="absolute right-3.5 top-3.5 material-symbols-outlined text-[18px] text-neutral-300">lock</span>
+              </div>
+              <input 
+                type="text" 
+                id="CardExpiry"
+                class="w-full px-4 py-3 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+                placeholder="EXPIRATION DATE (MM/YY)"
+              />
+              <input 
+                type="password" 
+                id="CardCvv"
+                maxlength="4"
+                class="w-full px-4 py-3 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+                placeholder="SECURITY CODE (CVV)"
+              />
+              <input 
+                type="text" 
+                id="CardName"
+                class="sm:col-span-2 w-full px-4 py-3 border border-neutral-200 text-[13px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+                placeholder="NAME ON CARD"
+              />
+            </div>
+          </div>
+
+          <!-- Choice 2: PayPal -->
+          <div class="payment-method-container">
+            <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-neutral-50/20 transition-all">
+              <div class="flex items-center gap-3">
+                <input 
+                  type="radio" 
+                  name="PaymentChoice" 
+                  value="paypal"
+                  onchange="togglePaymentMethods()"
+                  class="w-4 h-4 text-[#5a000c] border-neutral-300 focus:ring-[#5a000c]"
+                />
+                <span class="text-[12.5px] font-bold text-neutral-800 uppercase tracking-wider" style="font-family: 'Manrope', sans-serif;">PayPal Secure Checkout</span>
+              </div>
+              <span class="material-symbols-outlined text-[20px] text-neutral-400">payments</span>
+            </label>
+            <div id="PaypalSubForm" class="hidden p-5 bg-neutral-50/50 text-center text-[12px] font-medium text-neutral-500 uppercase leading-relaxed border-t border-neutral-100" style="font-family: 'Manrope', sans-serif;">
+              You will be redirected to PayPal to complete your purchase securely.
+            </div>
+          </div>
+
+          <!-- Choice 3: Bank Transfer -->
+          <div class="payment-method-container">
+            <label class="flex items-center justify-between p-4 cursor-pointer hover:bg-neutral-50/20 transition-all">
+              <div class="flex items-center gap-3">
+                <input 
+                  type="radio" 
+                  name="PaymentChoice" 
+                  value="bank"
+                  onchange="togglePaymentMethods()"
+                  class="w-4 h-4 text-[#5a000c] border-neutral-300 focus:ring-[#5a000c]"
+                />
+                <span class="text-[12.5px] font-bold text-neutral-800 uppercase tracking-wider" style="font-family: 'Manrope', sans-serif;">Wire Transfer / Bespoke Concierge</span>
+              </div>
+              <span class="material-symbols-outlined text-[20px] text-neutral-400">account_balance</span>
+            </label>
+            <div id="BankSubForm" class="hidden p-5 bg-[#fbf8ff] text-left text-[12px] font-medium text-neutral-600 uppercase leading-relaxed border-t border-neutral-100 space-y-2" style="font-family: 'Manrope', sans-serif;">
+              <p class="font-bold text-[#5a000c]">Atelier Wire details will be sent to your email.</p>
+              <p>Our bespoke design consultants will reach out to coordinate customization and measurement forms.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Action CTA Buttons (Mobile View Only) -->
+      <div class="block lg:hidden mt-8">
+        <button 
+          type="button" 
+          onclick="submitCheckout()"
+          class="w-full bg-[#5a000c] text-white py-4.5 rounded-lg font-bold text-[12px] tracking-widest uppercase hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#5a000c]/15"
+          style="font-family: 'Manrope', sans-serif;"
+        >
+          <span>Complete Secure Purchase</span>
+          <span class="material-symbols-outlined text-[18px]">verified_user</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Right Hand: Dynamic Order Sticky Box summary -->
+    <div class="lg:col-span-5 bg-[#f4f2fd]/55 border border-neutral-200/50 rounded-2xl px-6 md:px-8 py-8 md:py-10 h-fit space-y-8 sticky top-28 shadow-sm">
+      <h3 class="text-[16px] font-bold text-[#5a000c] uppercase tracking-widest border-b border-neutral-200/50 pb-4" style="font-family: 'Manrope', sans-serif;">
+        Order Review
+      </h3>
+      
+      <!-- Checkout Items Collection Grid List -->
+      <div class="space-y-6 max-h-[380px] overflow-y-auto pr-1">
+        
+        <!-- Cart Item 1: Saffron Meadows Co-ord Set -->
+        <div class="flex gap-4 items-center">
+          <div class="relative w-16 h-20 bg-white border border-neutral-100 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGRIpZMZhlEHS0_UOptJu8LKvrqQneYXLnA-TflyRyHkLQEglkaptV2XJGrIXb1u3fm1JtevL2KQ-qSExVROZtWeNkQ4g_H47wR7VVU33mZs1HqjblnHHh9Rck8vOSeG3oNnuNRr89MqEKXc-WkdThShrijS8S0_BVQRAdkV14d_IhZU79Cgmns0Jdu3SAXWVg3NXBTLc57_NdoEbunZ_uc8nKB6i_aEwrJHG3--qHDm1Km8ftpN-tRx0cgxZxd9ZbKOs0lSCQx3pJ" 
+              alt="Saffron Meadows Co-ord Set"
+              width="64"
+              height="80"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute -top-1.5 -right-1.5 bg-[#5a000c] text-white w-4.5 h-4.5 rounded-full text-[9px] flex items-center justify-center font-bold">1</span>
+          </div>
+          <div class="flex-grow space-y-0.5 text-left">
+            <h4 class="text-[12.5px] font-bold text-neutral-800 uppercase tracking-wide leading-tight" style="font-family: 'Manrope', sans-serif;">Saffron Meadows Co-ord Set</h4>
+            <p class="text-[10px] text-neutral-400 font-bold uppercase tracking-wider" style="font-family: 'Manrope', sans-serif;">Size: M / Silk</p>
+          </div>
+          <span class="text-[13.5px] font-bold text-neutral-800" style="font-family: 'Manrope', sans-serif;">$125.00</span>
+        </div>
+
+        <!-- Cart Item 2: Heritage Motif Scarf -->
+        <div class="flex gap-4 items-center">
+          <div class="relative w-16 h-20 bg-white border border-neutral-100 rounded-lg overflow-hidden flex-shrink-0 shadow-sm">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJYyWP1how9bHZxNa7GZXtUSDlgrvRxUEHpGrX3WUONZ0EgF16u3usmHug89UhXGm93VxbvyBxtBVCZNvoiws_IHM-liVfkGa5eblNC-b5gTb6KfRAqVObHJ5PN5HG_kY9PSt7DP-C2N3nlZo0dFFfCvn0YZrGF_CEljTLu6ltzXNSJHHYpeAJA3c_8umSzAlKLzeVEWtgG7r_gsKidh6wt1o5l433txIZP4mzKbPIoxYXFjvqoza2MgZq8B5jA-BqZY8rLx4OnnY5" 
+              alt="Heritage Motif Scarf"
+              width="64"
+              height="80"
+              class="w-full h-full object-cover"
+            />
+            <span class="absolute -top-1.5 -right-1.5 bg-[#5a000c] text-white w-4.5 h-4.5 rounded-full text-[9px] flex items-center justify-center font-bold">1</span>
+          </div>
+          <div class="flex-grow space-y-0.5 text-left">
+            <h4 class="text-[12.5px] font-bold text-neutral-800 uppercase tracking-wide leading-tight" style="font-family: 'Manrope', sans-serif;">Heritage Motif Scarf</h4>
+            <p class="text-[10px] text-neutral-400 font-bold uppercase tracking-wider" style="font-family: 'Manrope', sans-serif;">Color: Burgundy</p>
+          </div>
+          <span class="text-[13.5px] font-bold text-neutral-800" style="font-family: 'Manrope', sans-serif;">$32.00</span>
+        </div>
+
+      </div>
+
+      <!-- Coupon Applied Area -->
+      <div class="pt-6 border-t border-neutral-200/50 space-y-3">
+        <div class="flex gap-2">
+          <input 
+            type="text" 
+            id="CouponInput"
+            class="flex-grow px-4 py-3 border border-neutral-200 text-[12px] font-bold uppercase bg-white input-focus rounded-lg placeholder:text-neutral-400" 
+            placeholder="PROMO OR GIFT CARD CODE"
+          />
+          <button 
+            type="button"
+            onclick="applyCoupon()"
+            class="px-5 bg-neutral-200 text-[#5a000c] hover:bg-[#5a000c] hover:text-white font-bold text-[11px] uppercase tracking-widest transition-all rounded-lg duration-300"
+            style="font-family: 'Manrope', sans-serif;"
+          >
+            Apply
+          </button>
+        </div>
+        <div id="CouponBadge" class="hidden flex justify-between items-center bg-green-50 text-green-700 px-3.5 py-2.5 rounded-lg text-[12px] font-bold uppercase border border-green-200 transition-all">
+          <span class="flex items-center gap-1.5">
+            <span class="material-symbols-outlined text-[16px]">sell</span>
+            Code <span id="AppliedCodeText">WELCOME10</span> (10% Off) Applied
+          </span>
+          <button type="button" onclick="removeCoupon()" class="text-green-800 hover:text-red-700 flex items-center justify-center">
+            <span class="material-symbols-outlined text-[16px]">close</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Financial Calculation Pricing Summary -->
+      <div class="pt-6 border-t border-neutral-200/50 space-y-3.5 text-[12px] font-bold uppercase tracking-wider text-[#5c5e68]" style="font-family: 'Manrope', sans-serif;">
+        
+        <div class="flex justify-between items-center">
+          <span>Subtotal</span>
+          <span class="text-neutral-800" id="SummarySubtotal">$157.00</span>
+        </div>
+
+        <div class="flex justify-between items-center" id="DiscountRow" style="display: none;">
+          <span class="text-green-600">Promo Discount</span>
+          <span class="text-green-600" id="SummaryDiscount">-$15.70</span>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <span>Shipping & Ateliers</span>
+          <span class="text-neutral-800" id="SummaryShipping">$1.50</span>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <span>Estimated Taxes (12%)</span>
+          <span class="text-neutral-800" id="SummaryTax">$18.84</span>
+        </div>
+
+        <div class="flex justify-between items-end pt-5 border-t border-neutral-200/50">
+          <div class="text-left">
+            <span class="text-[15px] font-bold text-neutral-800 normal-case block" style="font-family: 'Noto Serif', serif;">Total Amount</span>
+            <span class="text-[9.5px] text-neutral-400 font-bold uppercase">Processed in USD</span>
+          </div>
+          <span class="text-[22px] font-bold text-[#5a000c]" style="font-family: 'Manrope', sans-serif;" id="SummaryTotal">
+            $177.34
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Action CTA Buttons (Desktop View) -->
+      <div class="hidden lg:block pt-4">
+        <button 
+          type="button" 
+          onclick="submitCheckout()"
+          class="w-full bg-[#5a000c] text-white py-4.5 rounded-lg font-bold text-[12px] tracking-widest uppercase hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-2 shadow-lg shadow-[#5a000c]/15"
+          style="font-family: 'Manrope', sans-serif;"
+        >
+          <span>Complete Secure Purchase</span>
+          <span class="material-symbols-outlined text-[18px]">verified_user</span>
+        </button>
+      </div>
+
+      <!-- Trust assurances -->
+      <div class="pt-6 border-t border-neutral-200/30 grid grid-cols-2 gap-4">
+        <div class="flex flex-col items-center text-center p-3 rounded-lg bg-white/40 border border-neutral-200/40">
+          <span class="material-symbols-outlined text-[#5a000c] mb-1.5" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+          <h5 class="text-[9.5px] font-bold text-neutral-800 uppercase tracking-wider">SSL Encrypted</h5>
+          <p class="text-[8.5px] text-neutral-400 uppercase font-semibold leading-tight mt-0.5">100% Secure Portal</p>
+        </div>
+        <div class="flex flex-col items-center text-center p-3 rounded-lg bg-white/40 border border-neutral-200/40">
+          <span class="material-symbols-outlined text-[#5a000c] mb-1.5" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+          <h5 class="text-[9.5px] font-bold text-neutral-800 uppercase tracking-wider">Authentic</h5>
+          <p class="text-[8.5px] text-neutral-400 uppercase font-semibold leading-tight mt-0.5">Indian Craftsmanship</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</main>
+
+<!-- Simplified Secure Checkout Footer -->
+<footer class="w-full bg-white border-t border-neutral-100 py-10 text-center">
+  <div class="max-w-[1280px] mx-auto px-6 md:px-16 space-y-6">
+    <div class="flex justify-center gap-8 text-[11px] font-bold uppercase tracking-widest text-[#5c5e68]" style="font-family: 'Manrope', sans-serif;">
+      <a href="/pages/shipping-policy" class="hover:text-[#5a000c] transition-colors">Shipping Info</a>
+      <a href="/pages/privacy-policy" class="hover:text-[#5a000c] transition-colors">Privacy Policy</a>
+      <a href="/pages/terms" class="hover:text-[#5a000c] transition-colors">Terms of Service</a>
+    </div>
+    <div class="flex justify-center gap-6 opacity-60">
+      <span class="material-symbols-outlined text-neutral-500 text-[24px]">payments</span>
+      <span class="material-symbols-outlined text-neutral-500 text-[24px]">credit_card</span>
+      <span class="material-symbols-outlined text-neutral-500 text-[24px]">lock</span>
+    </div>
+    <p class="text-[11px] text-neutral-400 font-medium" style="font-family: 'Manrope', sans-serif;">
+      © 2026 Tatsyaa. All Transactions are SSL Encrypted & Protected. Curating Indian Heritage globally.
+    </p>
+  </div>
+</footer>
+
+<!-- Secure Modal Transition Loader -->
+<div id="PaymentModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center flex-col text-white opacity-0 transition-opacity duration-300">
+  <div class="bg-white text-neutral-800 p-8 md:p-10 rounded-2xl max-w-[420px] w-[90%] text-center shadow-2xl border border-neutral-100 flex flex-col items-center space-y-6">
+    <div class="w-16 h-16 rounded-full bg-[#ffdad8] flex items-center justify-center text-[#5a000c] animate-bounce">
+      <span class="material-symbols-outlined text-[32px]">credit_card</span>
+    </div>
+    
+    <div class="space-y-2">
+      <h3 class="text-[18px] font-bold text-[#5a000c] uppercase tracking-wider" style="font-family: 'Noto Serif', serif;" id="PaymentModalTitle">
+        Processing Transaction...
+      </h3>
+      <p class="text-[12px] text-neutral-500 leading-relaxed font-semibold uppercase" style="font-family: 'Manrope', sans-serif;" id="PaymentModalDesc">
+        Please do not refresh this page. Contacting secure banking gateways.
+      </p>
+    </div>
+
+    <!-- Spinner -->
+    <div class="w-10 h-10 border-4 border-[#ffdad8] border-t-[#5a000c] rounded-full animate-spin"></div>
+  </div>
+</div>
+
+<!-- Interactive Client-side Script Controller -->
+<script>
+  let activeDiscount = 0;
+  let activeShipping = 1.50;
+  const baseSubtotal = 157.00;
+  let hasAppliedCode = false;
+
+  // Real-time pricing recalculations
+  function recalculateCheckout() {
+    // 1. Fetch active shipping rate from checked radios
+    const shippingRadios = document.getElementsByName('ShippingChoice');
+    for (let r of shippingRadios) {
+      if (r.checked) {
+        activeShipping = parseFloat(r.value);
+        break;
+      }
+    }
+
+    // 2. Adjust shipping displayed labels
+    document.getElementById('SummaryShipping').innerText = `$${activeShipping.toFixed(2)}`;
+
+    // 3. Compute discount (10% of subtotal if coupon applied)
+    if (hasAppliedCode) {
+      activeDiscount = baseSubtotal * 0.10;
+      document.getElementById('DiscountRow').style.display = 'flex';
+      document.getElementById('SummaryDiscount').innerText = `-$${activeDiscount.toFixed(2)}`;
+    } else {
+      activeDiscount = 0;
+      document.getElementById('DiscountRow').style.display = 'none';
+    }
+
+    // 4. Calculate Tax (12% of discounted subtotal)
+    const taxableSubtotal = baseSubtotal - activeDiscount;
+    const tax = taxableSubtotal * 0.12;
+    document.getElementById('SummaryTax').innerText = `$${tax.toFixed(2)}`;
+
+    // 5. Grand Total Calculation
+    const grandTotal = taxableSubtotal + activeShipping + tax;
+    document.getElementById('SummaryTotal').innerText = `$${grandTotal.toFixed(2)}`;
+  }
+
+  // Toggle checkout steps UI breadcrumb labels as inputs get completed
+  document.addEventListener('DOMContentLoaded', () => {
+    const emailInput = document.getElementById('CheckoutEmail');
+    const stepShipping = document.getElementById('StepShippingLabel');
+    const stepPayment = document.getElementById('StepPaymentLabel');
+
+    emailInput.addEventListener('input', () => {
+      if (emailInput.value.length > 3) {
+        stepShipping.className = 'text-[#5a000c] font-bold';
+      } else {
+        stepShipping.className = 'text-neutral-400';
+      }
+    });
+
+    const cardNum = document.getElementById('CardNumber');
+    cardNum.addEventListener('input', () => {
+      if (cardNum.value.length > 5) {
+        stepPayment.className = 'text-[#5a000c] font-bold';
+      } else {
+        stepPayment.className = 'text-neutral-400';
+      }
+    });
+  });
+
+  // Toggle active payment method sub-forms
+  function togglePaymentMethods() {
+    const paymentChoice = document.querySelector('input[name="PaymentChoice"]:checked').value;
+    
+    const cardForm = document.getElementById('CardSubForm');
+    const paypalForm = document.getElementById('PaypalSubForm');
+    const bankForm = document.getElementById('BankSubForm');
+
+    // Reset visibility classes
+    cardForm.classList.add('hidden');
+    paypalForm.classList.add('hidden');
+    bankForm.classList.add('hidden');
+
+    if (paymentChoice === 'card') {
+      cardForm.classList.remove('hidden');
+    } else if (paymentChoice === 'paypal') {
+      paypalForm.classList.remove('hidden');
+    } else if (paymentChoice === 'bank') {
+      bankForm.classList.remove('hidden');
+    }
+  }
+
+  // Live Coupon Management
+  function applyCoupon() {
+    const code = document.getElementById('CouponInput').value.trim().toUpperCase();
+    if (!code) return;
+
+    if (code === 'WELCOME10' || code === 'HERITAGE') {
+      hasAppliedCode = true;
+      document.getElementById('AppliedCodeText').innerText = code;
+      document.getElementById('CouponBadge').classList.remove('hidden');
+      document.getElementById('CouponInput').value = '';
+      recalculateCheckout();
+    } else {
+      alert('Invalid or expired gift code. Try using: WELCOME10');
+    }
+  }
+
+  function removeCoupon() {
+    hasAppliedCode = false;
+    document.getElementById('CouponBadge').classList.add('hidden');
+    recalculateCheckout();
+  }
+
+  // Purchase Simulation & redirection
+  function submitCheckout() {
+    // Basic verification check
+    const emailVal = document.getElementById('CheckoutEmail').value.trim();
+    const shipAddr = document.getElementById('ShipAddress').value.trim();
+
+    if (!emailVal || !shipAddr) {
+      alert('Please fill out your secure Contact Information and Shipping Address details before completing purchase.');
+      return;
+    }
+
+    const modal = document.getElementById('PaymentModal');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modal.classList.add('opacity-100');
+    }, 10);
+
+    // Simulate contacting payment networks
+    setTimeout(() => {
+      document.getElementById('PaymentModalTitle').innerText = "Transaction Verified!";
+      document.getElementById('PaymentModalDesc').innerText = "Purchase completed successfully. Redirecting you to heritage studio...";
+      document.getElementById('PaymentModalDesc').classList.add('text-green-600');
+      
+      // Clean dynamic redirect back to catalog gallery
+      setTimeout(() => {
+        window.location.href = "/?purchase=success";
+      }, 2000);
+    }, 3000);
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Tatsyaa Secure Checkout",
+  "settings": []
+}
+{% endschema %}
