@@ -5,9 +5,9 @@
 {% endcomment %}
 
 {% if page.handle == 'about-us' or page.handle == 'about' or page.handle == 'our-story' %}
-  {% section 'about-us' %}
+  {% render 'about-us-content' %}
 {% elsif page.handle == 'contact' or page.handle == 'contact-us' or page.handle == 'get-in-touch' %}
-  {% section 'contact-us' %}
+  {% render 'contact-us-content' %}
 {% else %}
   <section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-20 text-left">
     <h1 class="text-headline-lg md:text-[38px] font-normal text-[#5a000c] mb-6" style="font-family: 'Noto Serif', serif;">
