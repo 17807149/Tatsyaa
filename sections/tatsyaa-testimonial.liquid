@@ -1,0 +1,79 @@
+{% comment %}
+  Tatsyaa Testimonial Section
+  -------------------------------------------------------------
+  Description: Displays a large, premium quote/testimonial card using rich Noto Serif italic styling.
+  Dependencies:
+    - Tailwind CSS
+    - Google Fonts (Noto Serif, Manrope)
+    - Material Symbols
+  How to use:
+    - Add to page, customise the quote, author, and description text.
+{% endcomment %}
+
+<section class="py-24 bg-surface">
+  <div class="px-margin-desktop max-w-container-max mx-auto text-center">
+    <div class="max-w-3xl mx-auto">
+      
+      {% # Quote Icon %}
+      <span class="material-symbols-outlined text-primary text-5xl mb-8 block select-none">
+        format_quote
+      </span>
+      
+      {% # Testimonial Quote %}
+      {% if section.settings.quote != blank %}
+        <p class="text-headline-md font-headline-md italic text-on-surface-variant leading-relaxed mb-8">
+          "{{- section.settings.quote -}}"
+        </p>
+      {% endif %}
+
+      {% # Profile circle / Avatar %}
+      <div class="h-10 w-10 bg-primary-container mx-auto rounded-full mb-4"></div>
+      
+      {% # Author Details %}
+      {% if section.settings.author_name != blank %}
+        <h5 class="text-label-md font-label-md uppercase tracking-widest text-primary">
+          {{- section.settings.author_name -}}
+        </h5>
+      {% endif %}
+
+      {% if section.settings.author_title != blank %}
+        <p class="text-body-md text-outline">
+          {{- section.settings.author_title -}}
+        </p>
+      {% endif %}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Tatsyaa Testimonial",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "quote",
+      "label": "Testimonial Quote",
+      "default": "Tatsyaa represents everything I look for in modern Indian wear. The craftsmanship is impeccable, yet the silhouettes are wearable and globally relevant. It's heritage reinvented for today's woman."
+    },
+    {
+      "type": "text",
+      "id": "author_name",
+      "label": "Author Name",
+      "default": "Ananya Malhotra"
+    },
+    {
+      "type": "text",
+      "id": "author_title",
+      "label": "Author Subtitle / Title",
+      "default": "Fashion Consultant, Mumbai"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tatsyaa Testimonial",
+      "category": "Content"
+    }
+  ]
+}
+{% endschema %}

@@ -1,20 +1,36 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "hello-world",
+    "hero": {
+      "type": "tatsyaa-hero",
+      "settings": {}
+    },
+    "philosophy": {
+      "type": "tatsyaa-philosophy",
+      "settings": {}
+    },
+    "featured_collections": {
+      "type": "tatsyaa-featured-collections",
+      "settings": {}
+    },
+    "trending": {
+      "type": "tatsyaa-trending",
+      "settings": {}
+    },
+    "testimonial": {
+      "type": "tatsyaa-testimonial",
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "tatsyaa-newsletter",
       "settings": {}
     }
   },
   "order": [
-    "main"
+    "hero",
+    "philosophy",
+    "featured_collections",
+    "trending",
+    "testimonial",
+    "newsletter"
   ]
 }

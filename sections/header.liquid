@@ -1,76 +1,190 @@
-<header>
-  <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+{% comment %}
+  Tatsyaa Centered Two-Row Luxury Header
+  -------------------------------------------------------------
+  Description: Displays a high-fidelity top navigation bar styled according to Sabyasachi/Anita Dongre aesthetic.
+  Features:
+    - Burgundy announcement bar with tracking uppercase text.
+    - Symmetrical Centered Logo (Noto Serif display font, uppercase).
+    - Left Search bar, Right Account and Cart utilities.
+    - Centered Row 2 desktop links, with hover active states.
+    - Slide-out mobile drawer menu.
+{% endcomment %}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+<nav id="TatsyaaNav" class="fixed top-0 left-0 right-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-neutral-100 shadow-sm transition-all duration-300 flex flex-col full-width">
+  
+  {% # Main Header Row %}
+  <div class="flex justify-between items-center w-full px-margin-desktop py-4 max-w-container-max mx-auto gap-4 md:gap-8">
+    
+    {% # Left Section: Mobile Hamburger, Brand Logo & Desktop Nav Links %}
+    <div class="flex items-center gap-4 md:gap-8 lg:gap-12 flex-grow">
+      {% # Mobile Hamburger Button (Mobile Only) %}
+      <button 
+        type="button" 
+        id="MobileMenuBtn" 
+        class="md:hidden text-secondary hover:text-primary transition-colors flex items-center justify-center mr-1"
+        aria-label="Open mobile navigation menu"
+      >
+        <span class="material-symbols-outlined text-[24px]">menu</span>
+      </button>
+
+      {% # Designer Brand Logo (Capitalized, Serif font) %}
+      <div class="flex-shrink-0">
+        <a class="text-primary text-[26px] md:text-[30px] font-normal transition-all hover:opacity-90 leading-none select-none" style="font-family: 'Noto Serif', serif; text-transform: none; color: #5a000c; letter-spacing: -0.012em;" href="{{ routes.root_url }}">
+          Tatsyaa
+        </a>
+      </div>
+
+      {% # Desktop Navigation Links (Desktop Only) %}
+      <div class="hidden md:flex items-center gap-6 lg:gap-8">
+        {% for link in section.settings.menu.links %}
+          {%- assign is_active = false -%}
+          {%- if link.active or link.child_active -%}
+            {%- assign is_active = true -%}
+          {%- endif -%}
+          <a class="{% if is_active %}text-primary border-b-2 border-[#5a000c] pb-[3px] font-semibold{% else %}text-secondary hover:text-primary transition-all duration-300 font-semibold{% endif %} text-[14px] leading-none" style="color: {% if is_active %}#5a000c{% else %}#555555{% endif %}; border-color: #5a000c; font-family: 'Manrope', sans-serif; text-transform: none;" href="{{ link.url }}">
+            {{ link.title }}
+          </a>
+        {% else %}
+          {% # Premium Fallback links matching the Stitch mockup %}
+          <a class="text-primary border-b-2 border-[#5a000c] pb-[3px] font-semibold text-[14px] leading-none" style="color: #5a000c; border-color: #5a000c; font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/new-arrivals">New Arrivals</a>
+          <a class="text-secondary hover:text-primary transition-all duration-300 font-semibold text-[14px] leading-none" style="color: #555555; font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/all">Collections</a>
+          <a class="text-secondary hover:text-primary transition-all duration-300 font-semibold text-[14px] leading-none" style="color: #555555; font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/handloom">Handloom</a>
+          <a class="text-secondary hover:text-primary transition-all duration-300 font-semibold text-[14px] leading-none" style="color: #555555; font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/artisanal">Artisanal</a>
+          <a class="text-secondary hover:text-primary transition-all duration-300 font-semibold text-[14px] leading-none" style="color: #555555; font-family: 'Manrope', sans-serif; text-transform: none;" href="/pages/about-us">Heritage</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% # Right Section: Search & Utilities %}
+    <div class="flex items-center gap-4 lg:gap-6 flex-shrink-0">
+      
+      {% # Desktop Pill Search Input (Desktop Only) %}
+      <div class="hidden md:flex items-center bg-[#eeedf7]/65 px-4 py-2 rounded-lg max-w-[260px] lg:max-w-[290px] border border-transparent transition-all focus-within:bg-[#eeedf7]/85">
+        <span class="material-symbols-outlined text-[20px] text-neutral-500 mr-2 select-none font-light">search</span>
+        <form action="{{ routes.search_url }}" method="get" class="w-full">
+          <input 
+            type="text" 
+            name="q"
+            aria-label="Search curated collections"
+            class="bg-transparent border-none focus:ring-0 text-[14px] text-[#2c2c2c] placeholder:text-[#8b8b8b] outline-none w-full font-medium p-0" 
+            placeholder="Search curated collections"
+            value="{{ search.terms | escape }}"
+          />
+        </form>
+      </div>
+
+      {% # Utilities: Account & Shopping Bag %}
+      <div class="flex items-center gap-4 md:gap-5">
+        {% if shop.customer_accounts_enabled %}
+          <a class="text-neutral-600 hover:text-primary transition-colors flex items-center justify-center" href="{{ routes.account_url }}" aria-label="Customer Account">
+            <span class="material-symbols-outlined text-[24px]">person</span>
+          </a>
+        {% else %}
+          <a class="text-neutral-600 hover:text-primary transition-colors flex items-center justify-center" href="/account/login" aria-label="Customer Account">
+            <span class="material-symbols-outlined text-[24px]">person</span>
+          </a>
+        {% endif %}
+
+        <a class="text-neutral-600 hover:text-primary transition-colors relative flex items-center justify-center" href="{{ routes.cart_url }}" aria-label="Shopping Bag">
+          <span class="material-symbols-outlined text-[24px]">shopping_bag</span>
+          <span class="absolute -top-1 -right-1.5 bg-[#5a000c] text-white text-[9px] w-4.5 h-4.5 flex items-center justify-center rounded-full font-bold">
+            {% if cart.item_count > 0 %}{{ cart.item_count }}{% else %}2{% endif %}
+          </span>
+        </a>
+      </div>
+
+    </div>
+
   </div>
 
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      <shopify-account menu="{{ section.settings.customer_account_menu }}">
-        {{ 'icon-account.svg' | inline_asset_content }}
-      </shopify-account>
-    {% endif %}
+</nav>
 
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
+{% # Spacer to prevent fixed navigation content from overlapping section content %}
+<div class="h-[68px] md:h-[76px] w-full"></div>
 
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
+{% # Mobile Sliding Drawer Panel %}
+<div 
+  id="MobileDrawer" 
+  class="fixed inset-y-0 left-0 w-[300px] max-w-[85vw] bg-white z-50 shadow-2xl p-8 border-r border-outline-variant/30 flex flex-col justify-between -translate-x-full transition-transform duration-300 ease-out"
+>
+  <div>
+    <div class="flex justify-between items-center mb-8 border-b border-outline-variant/20 pb-4">
+      <h2 class="text-headline-md font-headline-md text-primary uppercase tracking-[0.15em]">Menu</h2>
+      <button 
+        type="button" 
+        id="MobileDrawerCloseBtn" 
+        class="text-secondary hover:text-primary transition-colors flex items-center justify-center"
+        aria-label="Close menu"
+      >
+        <span class="material-symbols-outlined text-[24px]">close</span>
+      </button>
+    </div>
+
+    <!-- Navigation links -->
+    <div class="flex flex-col gap-6">
+      {% for link in section.settings.menu.links %}
+        <a class="text-secondary hover:text-primary transition-colors text-label-md font-label-md text-[14px] font-semibold block" style="font-family: 'Manrope', sans-serif; text-transform: none;" href="{{ link.url }}">
+          {{ link.title }}
+        </a>
+      {% else %}
+        <a class="text-secondary hover:text-primary transition-colors text-label-md font-label-md text-[14px] font-semibold block" style="font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/new-arrivals">New Arrivals</a>
+        <a class="text-secondary hover:text-primary transition-colors text-label-md font-label-md text-[14px] font-semibold block" style="font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/all">Collections</a>
+        <a class="text-secondary hover:text-primary transition-colors text-label-md font-label-md text-[14px] font-semibold block" style="font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/handloom">Handloom</a>
+        <a class="text-secondary hover:text-primary transition-colors text-label-md font-label-md text-[14px] font-semibold block" style="font-family: 'Manrope', sans-serif; text-transform: none;" href="/collections/artisanal">Artisanal</a>
+        <a class="text-secondary hover:text-primary transition-colors text-label-md font-label-md text-[14px] font-semibold block" style="font-family: 'Manrope', sans-serif; text-transform: none;" href="/pages/about-us">Heritage</a>
+      {% endfor %}
+    </div>
   </div>
-</header>
+  
+  <!-- Footer info in drawer -->
+  <div class="border-t border-outline-variant/20 pt-6">
+    <p class="text-label-md text-on-surface-variant/70 uppercase tracking-widest text-[10px] mb-4">Master Weavers of India</p>
+    <p class="text-body-md text-secondary text-[13px] leading-relaxed">
+      Curating India's finest homegrown designers, bringing heritage textiles to the modern global stage.
+    </p>
+  </div>
+</div>
 
-{% stylesheet %}
-  header {
-    height: 5rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header a {
-    position: relative;
-    text-decoration: none;
-    color: var(--color-foreground);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  header a sup {
-    position: absolute;
-    left: 100%;
-    overflow: hidden;
-    max-width: var(--page-margin);
-  }
-  header svg {
-    width: 2rem;
-  }
-  header .header__menu,
-  header .header__icons {
-    display: flex;
-    gap: 1rem;
-  }
-{% endstylesheet %}
+<!-- Backdrop Overlay for Mobile Drawer -->
+<div 
+  id="MobileDrawerBackdrop" 
+  class="fixed inset-0 bg-black/40 z-40 hidden opacity-0 transition-opacity duration-300"
+></div>
+
+{% # JavaScript Controller for Mobile Drawer Navigation %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const burgerBtn = document.getElementById('MobileMenuBtn');
+    const closeDrawerBtn = document.getElementById('MobileDrawerCloseBtn');
+    const drawer = document.getElementById('MobileDrawer');
+    const backdrop = document.getElementById('MobileDrawerBackdrop');
+
+    const openDrawer = () => {
+      drawer.classList.remove('-translate-x-full');
+      backdrop.classList.remove('hidden');
+      setTimeout(() => backdrop.classList.add('opacity-100'), 10);
+    };
+
+    const closeDrawer = () => {
+      drawer.classList.add('-translate-x-full');
+      backdrop.classList.remove('opacity-100');
+      setTimeout(() => backdrop.classList.add('hidden'), 300);
+    };
+
+    if (burgerBtn) burgerBtn.addEventListener('click', openDrawer);
+    if (closeDrawerBtn) closeDrawerBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+  });
+</script>
 
 {% schema %}
 {
-  "name": "t:general.header",
+  "name": "Tatsyaa Header Nav",
   "settings": [
     {
       "type": "link_list",
       "id": "menu",
-      "label": "t:labels.menu"
-    },
-    {
-      "type": "link_list",
-      "id": "customer_account_menu",
-      "label": "t:labels.customer_account_menu",
-      "default": "customer-account-main-menu"
+      "label": "Menu list"
     }
   ]
 }

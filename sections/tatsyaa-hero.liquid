@@ -1,0 +1,135 @@
+{% comment %}
+  Tatsyaa Hero Section
+  -------------------------------------------------------------
+  Description: Displays a high-fidelity hero banner with customizable text, image, and double call-to-actions.
+  Dependencies:
+    - Tailwind CSS classes (preconfigured custom palette)
+    - Google Fonts (Noto Serif for headings, Manrope for sans text)
+  How to use:
+    - Add to any page via the theme editor.
+    - Customize image, badge text, headings, buttons, and text alignment in the schema panel.
+{% endcomment %}
+
+<section class="relative h-[90vh] min-h-[600px] w-full overflow-hidden flex items-center {{ section.settings.alignment_class }} full-width">
+  <div class="absolute inset-0 bg-primary/10">
+    {% if section.settings.background_image %}
+      {{ section.settings.background_image | image_url: width: 2500 | image_tag: class: 'w-full h-full object-cover', loading: 'eager', fetchpriority: 'high' }}
+    {% else %}
+      <img alt="Hero Background Placeholder" width="1920" height="1080" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnaM6vScLJoKa1L5H5K1AKIi0ubwNiLFGiRXsP70rFH76lwlqozMem0difvrCCn7FPYKLmhn5oz5wKUJn4xSiJ2bKYVD9u3fRWvHxkGIGzYY1gb_QfMAJsijn-a1uvZ1g0D3qDWqK9tFZdyQBfaeO2c4ylA67erURZRPO6dC6qZS2ICTvztz7nmR5kclykcA3_59Z9dkouwFMo-LdC6RMwpvcNaC-ccSlNUk3z-LEYWNYDoPLYiXdui42DU7HCFSgH3UeJ_b9H5kvq"/>
+    {% endif %}
+    <div class="absolute inset-0 hero-gradient"></div>
+  </div>
+
+  <div class="relative w-full max-w-container-max mx-auto px-margin-desktop text-white z-10 flex flex-col {{ section.settings.layout_alignment_class }}">
+    {%- if section.settings.badge_text != blank -%}
+      <span class="text-label-md font-label-md uppercase tracking-[0.2em] mb-4 opacity-90 animate-fade-in block">
+        {{- section.settings.badge_text -}}
+      </span>
+    {%- endif -%}
+    
+    {%- if section.settings.title != blank -%}
+      <h1 class="text-display-lg md:text-[64px] font-display-lg mb-8 leading-tight max-w-4xl">
+        {{- section.settings.title | replace: '\n', '<br class="hidden md:block"/>' -}}
+      </h1>
+    {%- endif -%}
+
+    <div class="flex flex-col sm:flex-row gap-4 {% if section.settings.layout_alignment_class == 'items-center' %}justify-center{% elsif section.settings.layout_alignment_class == 'items-end' %}justify-end{% else %}justify-start{% endif %}">
+      {%- if section.settings.btn1_text != blank and section.settings.btn1_link != blank -%}
+        <a href="{{ section.settings.btn1_link }}" class="bg-primary-container text-white px-10 py-4 text-label-md font-label-md uppercase tracking-wider hover:bg-primary transition-all duration-300 inline-block text-center">
+          {{- section.settings.btn1_text -}}
+        </a>
+      {%- else -%}
+        {% # Mock fallback button if no URL set %}
+        <a href="#" class="bg-primary-container text-white px-10 py-4 text-label-md font-label-md uppercase tracking-wider hover:bg-primary transition-all duration-300 inline-block text-center">
+          Shop the Collection
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.btn2_text != blank and section.settings.btn2_link != blank -%}
+        <a href="{{ section.settings.btn2_link }}" class="bg-transparent border border-white text-white px-10 py-4 text-label-md font-label-md uppercase tracking-wider hover:bg-white hover:text-primary transition-all duration-300 inline-block text-center">
+          {{- section.settings.btn2_text -}}
+        </a>
+      {%- else -%}
+        {% # Mock fallback button if no URL set %}
+        <a href="#" class="bg-transparent border border-white text-white px-10 py-4 text-label-md font-label-md uppercase tracking-wider hover:bg-white hover:text-primary transition-all duration-300 inline-block text-center">
+          View Lookbook
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Tatsyaa Hero Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge Text",
+      "default": "Established Excellence"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading Text",
+      "default": "Timeless Artistry for the\nModern Woman"
+    },
+    {
+      "type": "select",
+      "id": "alignment_class",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "justify-start text-left", "label": "Left" },
+        { "value": "justify-center text-center", "label": "Center" },
+        { "value": "justify-end text-right", "label": "Right" }
+      ],
+      "default": "justify-center text-center"
+    },
+    {
+      "type": "select",
+      "id": "layout_alignment_class",
+      "label": "Block Placement",
+      "options": [
+        { "value": "items-start", "label": "Left aligned contents" },
+        { "value": "items-center", "label": "Center aligned contents" },
+        { "value": "items-end", "label": "Right aligned contents" }
+      ],
+      "default": "items-center"
+    },
+    {
+      "type": "text",
+      "id": "btn1_text",
+      "label": "Button 1 Text",
+      "default": "Shop the Collection"
+    },
+    {
+      "type": "url",
+      "id": "btn1_link",
+      "label": "Button 1 Link"
+    },
+    {
+      "type": "text",
+      "id": "btn2_text",
+      "label": "Button 2 Text",
+      "default": "View Lookbook"
+    },
+    {
+      "type": "url",
+      "id": "btn2_link",
+      "label": "Button 2 Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tatsyaa Hero Banner",
+      "category": "Hero Banner"
+    }
+  ]
+}
+{% endschema %}

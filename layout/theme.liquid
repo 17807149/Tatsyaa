@@ -17,6 +17,31 @@
       {{ settings.type_primary_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
     {% endunless %}
 
+    {% # Load Google Fonts Noto Serif & Manrope + Material Symbols %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+    {% # Load Tailwind Play CDN and deferred configuration asset %}
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" defer></script>
+    <script src="{{ 'tailwind-config.js' | asset_url }}" defer></script>
+    
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+      }
+      .font-display-lg { font-family: 'Noto Serif', serif; }
+      .font-headline-lg { font-family: 'Noto Serif', serif; }
+      .font-headline-md { font-family: 'Noto Serif', serif; }
+      .font-body-lg { font-family: 'Manrope', sans-serif; }
+      .font-body-md { font-family: 'Manrope', sans-serif; }
+      .font-label-md { font-family: 'Manrope', sans-serif; }
+      .hero-gradient {
+        background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+      }
+    </style>
+
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
@@ -26,11 +51,36 @@
     {{ content_for_header }}
   </head>
 
-  <body>
+  <body class="bg-surface font-sans text-on-surface{% if template.name == 'collection' %} !bg-white{% endif %}">
     {% sections 'header-group' %}
 
     {{ content_for_layout }}
 
     {% sections 'footer-group' %}
+
+    <!-- Back to Top Button -->
+    <button class="fixed bottom-10 right-10 w-12 h-12 bg-primary-container text-white rounded-full shadow-xl opacity-0 translate-y-10 transition-all duration-500 z-50 flex items-center justify-center hover:bg-primary" id="backToTop" aria-label="Back to Top">
+      <span class="material-symbols-outlined">arrow_upward</span>
+    </button>
+    <script>
+      const backToTopBtn = document.getElementById('backToTop');
+      
+      window.addEventListener('scroll', () => {
+        if (window.scrollY > 500) {
+          backToTopBtn.classList.remove('opacity-0', 'translate-y-10');
+          backToTopBtn.classList.add('opacity-100', 'translate-y-0');
+        } else {
+          backToTopBtn.classList.add('opacity-0', 'translate-y-10');
+          backToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+        }
+      });
+
+      backToTopBtn.onclick = function() {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      };
+    </script>
   </body>
 </html>

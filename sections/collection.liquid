@@ -1,47 +1,599 @@
 {% comment %}
-  This section is used in the collection template to render collection page
-  listing all products within a collection.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Tatsyaa High-Fidelity Shop All / Collection Section
+  -------------------------------------------------------------
+  Description: Displays a grid of products with a desktop left sidebar and mobile drawer.
+  Includes:
+    - Pure white page background.
+    - Dynamic breadcrumbs (Home / Collections / Title).
+    - Filters: Style, Age Group, Size, Price Range, Availability.
+    - Responsive 3-column grid on desktop, 2-column on mobile.
+    - Synchronized clientside multi-filtering and sorting.
 {% endcomment %}
 
-<h1>{{ collection.title }}</h1>
+<section class="w-full bg-white py-12 px-margin-desktop max-w-container-max mx-auto full-width" id="TatsyaaCollectionSection">
+  
+  {% # 1. Dynamic Breadcrumbs %}
+  <nav class="text-label-md text-secondary/70 uppercase tracking-[0.15em] mb-8 flex gap-2 items-center text-[12px]" aria-label="breadcrumbs">
+    <a href="{{ routes.root_url }}" class="hover:text-primary transition-colors">Home</a>
+    <span class="text-outline-variant">/</span>
+    {% if collection.handle %}
+      <a href="/collections" class="hover:text-primary transition-colors">Collections</a>
+      <span class="text-outline-variant">/</span>
+      <span class="text-primary font-semibold">{{ collection.title }}</span>
+    {% else %}
+      <span class="text-primary font-semibold">Shop All</span>
+    {% endif %}
+  </nav>
 
-<div class="collection-products">
-  {% paginate collection.products by 20 %}
-    {% for product in collection.products %}
-      <div class="collection-product">
-        {% if product.featured_image %}
-          {% render 'image',
-            class: 'collection-product__image',
-            image: product.featured_image,
-            url: product.url,
-            width: 400,
-            height: 400,
-            crop: 'center'
-          %}
-        {% endif %}
-        <div class="collection-product__content">
-          <p>{{ product.title | escape | link_to: product.url }}</p>
-          <p>{{ product.price | money }}</p>
+  {% # 2. Editorial Header %}
+  <header class="text-left mb-12 border-b border-outline-variant/20 pb-8" data-aos="fade-up">
+    <h1 class="text-display-lg font-display-lg text-primary mb-3">
+      {{ collection.title | default: "Shop All" }}
+    </h1>
+    <p class="text-body-lg text-secondary max-w-4xl leading-relaxed">
+      {{ collection.description | default: "Explore our foundational edits blending centuries of artisanal homegrown legacy with modern, architectural silhouettes." }}
+    </p>
+  </header>
+
+  {% # 3. Main Filter & Grid Layout Split %}
+  <div class="flex flex-col md:flex-row gap-12 items-start">
+    
+    {% # DESKTOP LEFT SIDEBAR FILTERS (Visible md+, hidden mobile) %}
+    <aside class="hidden md:block w-72 shrink-0 border-r border-outline-variant/30 pr-8 sticky top-24">
+      <div class="flex justify-between items-center mb-8 border-b border-outline-variant/20 pb-4">
+        <h2 class="text-headline-md font-headline-md text-primary">Filters</h2>
+        <button type="button" class="ResetFiltersBtn text-label-md text-secondary hover:text-primary uppercase tracking-widest text-[11px] font-semibold">Clear All</button>
+      </div>
+
+      {% # Render all filter subsections %}
+      {% render 'collection-filters-ui', id_prefix: 'desktop' %}
+    </aside>
+
+    {% # RIGHT MAIN CONTENT (Toolbar + Product Grid) %}
+    <div class="flex-grow w-full">
+      
+      {% # Filter & Sort Toolbar %}
+      <div class="border-b border-outline-variant/20 pb-6 mb-10 flex flex-col sm:flex-row justify-between items-center gap-6">
+        <div class="text-label-md font-label-md text-on-surface-variant uppercase tracking-widest flex items-center gap-2 text-[12px]">
+          <span class="material-symbols-outlined text-[16px] text-outline">widgets</span>
+          <span id="ProductCount">10 Products</span>
+        </div>
+        
+        <div class="flex gap-4 items-center w-full sm:w-auto justify-between sm:justify-end">
+          {% # Mobile Drawer Trigger (Hidden on md+) %}
+          <button 
+            type="button" 
+            id="FilterDrawerToggleBtn"
+            class="md:hidden flex items-center gap-2 text-label-md font-label-md text-primary uppercase tracking-widest border border-outline/20 px-5 py-3 hover:bg-primary hover:text-white transition-all text-[12px]"
+          >
+            <span class="material-symbols-outlined text-[18px]">filter_list</span>
+            Filters
+          </button>
+
+          {% # Sort Dropdown %}
+          <div class="relative min-w-[220px]">
+            <select 
+              id="SortSelect" 
+              aria-label="Sort products"
+              class="w-full bg-white border border-outline/20 px-4 py-3 text-label-md font-label-md text-secondary outline-none focus:border-primary uppercase tracking-wider appearance-none rounded-none cursor-pointer text-[12px]"
+            >
+              <option value="featured">Featured</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="title-az">Name: A to Z</option>
+            </select>
+            <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none select-none">arrow_drop_down</span>
+          </div>
         </div>
       </div>
-    {% endfor %}
 
-    {{ paginate | default_pagination }}
-  {% endpaginate %}
-</div>
+      {% # Product Grid (3 columns md+, 2 columns mobile) %}
+      <div 
+        id="TatsyaaProductGrid" 
+        class="grid grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-12 transition-opacity duration-300 min-h-[400px]"
+      >
+        {% assign chosen_products = collection.products %}
+        {% if chosen_products.size > 0 %}
+          
+          {% # Live Products loop %}
+          {% for product in chosen_products %}
+            <div 
+              class="group product-card" 
+              data-price="{{ product.price }}"
+              data-title="{{ product.title | escape }}"
+              data-category="{{ product.type | default: 'All' }}"
+              data-fabric="Cotton"
+              data-size="S, M, L"
+              data-age="Adults"
+              data-availability="In Stock"
+            >
+              <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+                {% if product.featured_image %}
+                  {{ product.featured_image | image_url: width: 800 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+                {% endif %}
+                <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <a href="{{ product.url }}" class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</a>
+                </div>
+              </div>
+              <div class="text-center px-2">
+                <h3 class="font-headline-md text-headline-sm text-primary mb-1 truncate px-1">
+                  <a href="{{ product.url }}">{{ product.title }}</a>
+                </h3>
+                <p class="text-body-md font-body-md text-outline">{{ product.price | money }}</p>
+              </div>
+            </div>
+          {% endfor %}
+          
+        {% else %}
+          
+          {% # High-Fidelity Fallback Mock Lookbook Catalog %}
+          <!-- Mock Product 1: Anya Lace Tunic Set -->
+          <div class="product-card group" data-price="125" data-title="Anya Lace Tunic Set" data-category="Tunics" data-fabric="Lace" data-size="S,M,L" data-age="Adults" data-availability="in-stock">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Anya Lace Tunic Set" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABPwn0l3VFDG4m3Qb9NgoNgDR56XFHtwwlo4KDdf0w0czfdFb8uH0t4ned1hqJI4_FkQmbobfi0UHKePVDAVELdnb9A62wssN5Isqoy3-BD2hBij-5at35iFiIdYp5NNCdcmt0ZlqCfsR_zgFYS72jLP69MEbJfwH48EHwIjMx4q-2M67JkpqYf0-DSqs83lN1kovpJSfRK25BPcUTS5YNs6uQdxDSERrvSLXGKn95hv0A6ScLAPT-P733lZWlE4ayAGXhaO8M7UoV"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Anya Lace Tunic Set</h3>
+              <p class="text-body-md font-body-md text-outline">$125</p>
+            </div>
+          </div>
 
-{% stylesheet %}
-  .collection-products {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+          <!-- Mock Product 2: Meera Silk Waistcoat -->
+          <div class="product-card group" data-price="89" data-title="Meera Silk Waistcoat" data-category="Waistcoats" data-fabric="Silk" data-size="M,L,XL" data-age="Adults" data-availability="in-stock">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Meera Silk Waistcoat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfcKJMO4Ndp7BDje8i1plFA5yaxrizYF1gghwLktFbjnNIUJ24Tpfaaj4YvVn3WrTbv-8wHFtEyRI5aeGohaOqcAGuqRxemr1Hee21I5E7tyhJ2SOVKHPeAIlAqs8an41ZKQqFuPRJzlXU7Km4LowVFoUyQIY1FwJVvBQ4rvjgYF7sTlSXj5tlUqwW37i9ASV2NkqO80EnV9M3kjW_lCdsof9L6EMWlNgOOruU-nxjlGO9VxjRv-3yPKWhMrXbgxJJZ86OC51JvsjQ"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Meera Silk Waistcoat</h3>
+              <p class="text-body-md font-body-md text-outline">$89</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 3: Gul Embroidered Suit -->
+          <div class="product-card group" data-price="142" data-title="Gul Embroidered Suit" data-category="Suits" data-fabric="Cotton" data-size="S,M,L" data-age="Adults" data-availability="made-to-order">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Gul Embroidered Suit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCCzH7Z-cSG3pKhMnkWXdUuinfi0kXKtbBrKB9VNIg6KhigZc1kEtDHCaK0aNiK14eWThga0us8VqanoeujJCbHXG_96E0_OJk9Bju8P8QtNb-gX4R8f4lZahnVe-BVlxcPHzRMp4Eeo3475xuuQxZC6w9RR8oGL4EhvxXjy30ElaynjEw1h4t7lqWoRiuwrzCRwhBGNA7mC-MEQ7mflo4pf2EPWnBTBjqkDn4VOabVuLVp9CUmYKj3wbzHghB9Ox1RVelGRJkioN"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Gul Embroidered Suit</h3>
+              <p class="text-body-md font-body-md text-outline">$142</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 4: Vanya Organza Dupatta -->
+          <div class="product-card group" data-price="56" data-title="Vanya Organza Dupatta" data-category="Dupattas" data-fabric="Organza" data-size="XS,S,M,L,XL,XXL" data-age="Adults" data-availability="in-stock">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Vanya Organza Dupatta" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbz0u0MEUp_fSROW6SPFPhsCxNCuSKILO77eexU34k2k1D87xsGtxHY-l7kRqACILfdzu6Q-5XpQY3BWNi8w2mpLLrr5hsAAZa3vTjvHFZH-tmda82c6MtEWuxS43thX2Ldd3WVsSfPRO5uvySufvOrdELPhbL-naKq6ktz6A2xMwrR5wRZG7jC_15IgbSRyaNsw5MMPs8rkaPvpzjuoq2bTpqgv8GG-0s12kaMawX20hDrVDwRRUta8nB2GNcu3wOSyWKRklUnpbI"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Vanya Organza Dupatta</h3>
+              <p class="text-body-md font-body-md text-outline">$56</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 5: Kiara Brocade Blazer -->
+          <div class="product-card group" data-price="168" data-title="Kiara Brocade Blazer" data-category="Jackets" data-fabric="Silk" data-size="S,M,L,XL" data-age="Adults" data-availability="made-to-order">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Kiara Brocade Blazer" src="https://lh3.googleusercontent.com/aida/ADBb0ugc08VkdMgN1L6JwpJNgjTx7ntAKACDXBuuw9FJ86Ko2QwLtcrWmHAvnCkVx7_gO1smqLIkDErHiQeUGbNtz-ENirJLpowDXjRx68ksoThDE1bGD5XZpCCf-O1iyvpcfkcbBgGppa-c3hW8vaxCdjW8wc2s_JFxGGS5h5yTaDMpecQ4UcnnreR1y77Ji-b3Kf5_FrwXMRv1sU6KuqZSjBQaCcOdCCf556Bf_-34MS0nmB690SCi94mIhRD1_AJzrx3kJfAmAkua_d8"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Kiara Brocade Blazer</h3>
+              <p class="text-body-md font-body-md text-outline">$168</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 6: Devika Indigo Kurta -->
+          <div class="product-card group" data-price="72" data-title="Devika Indigo Kurta" data-category="Kurtas" data-fabric="Cotton" data-size="M,L,XL" data-age="Adults" data-availability="in-stock">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Devika Indigo Kurta" src="https://lh3.googleusercontent.com/aida/ADBb0uhFXvnS_emkPGLTrSjlmDjGOTfzZA2SNAQLjf9FvzG1OODAcoT-sIiXL5WnXawYaZKgnvoZ0Sh9mOYwmMKv2JkEX_wUFWsXhRbnfHxWkRhdf4DD4FHcbxO4oM0bPqbbwCK8rskVNwzvxwq3VdyWOzrXp5mOLvXWye8Ok-LKEYL9UG-eEJSkyHAJVU3mO0BMi_7ls_idtIG3-mZqapKdTb4XA7uqzFK_ZmjfRBjjUdI9Db3fHQObVDDqwSrZK12lasy0vatx57WZMuU"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Devika Indigo Kurta</h3>
+              <p class="text-body-md font-body-md text-outline">$72</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 7: Sitara Chikankari Anarkali -->
+          <div class="product-card group" data-price="189" data-title="Sitara Chikankari Anarkali" data-category="Anarkalis" data-fabric="Georgette" data-size="S,M,L" data-age="Adults" data-availability="made-to-order">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Sitara Chikankari Anarkali" src="https://lh3.googleusercontent.com/aida/ADBb0uiW5sU_7ekDnDzkuzKPyszoLsiOvcO2OaMS9elmlTPkMFhqyx4k9kc9PvdejiSBm87E6EP098UDEPCe-ry5iIXXGtOHo_Di72pMY1w07FwxEJSo-Ht6CTX70cQe_yAV97IuR_1DpIWqsONIVzwzxR1b_UjkKUJpZmW-qdiqIw_A5qf7QoZtVZR26w6jS6SJi8036BWvjqbW34g44FafdKptIAvZvslDzWI2RLoiOH2h9sHz6CKD3OoCK3iGUVMANHqeGF7TBJZup5o"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Sitara Chikankari Anarkali</h3>
+              <p class="text-body-md font-body-md text-outline">$189</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 8: Radha Floral Lehenga -->
+          <div class="product-card group" data-price="245" data-title="Radha Floral Lehenga" data-category="Lehengas" data-fabric="Silk" data-size="XS,S,M,L" data-age="Adults" data-availability="in-stock">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Radha Floral Lehenga" src="https://lh3.googleusercontent.com/aida/ADBb0uixI8aoCa7-O8MNCoKei6qvzuwPYIePazYl37ODQSutTMFNJaFXzK6NYmBwdyXJq77vhRK_R53DLVM4cHr9rvgGh02nqh4LamwonxjvEp9HAb2j0RLOmbK9YPgXcjT_VnIcHWFM9XXBMDlvuRk0YVY-hxIuVNvxINHiKJ6uS7BoAawYi_jJ-LfQ7YAMmumSk88ZkQpA8g68EA2FywrcD1IwOE0nZUUEpd1oVpy26mhYW_vhicHEgqTVnO0lDawHhqZWMHketSJtsQ"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Radha Floral Lehenga</h3>
+              <p class="text-body-md font-body-md text-outline">$245</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 9: Chota Weaver Silk Kurta (Kids) -->
+          <div class="product-card group" data-price="32" data-title="Chota Weaver Silk Kurta" data-category="Kurtas" data-fabric="Silk" data-size="XS,S" data-age="Kids" data-availability="in-stock">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Chota Weaver Silk Kurta" src="https://lh3.googleusercontent.com/aida/ADBb0uhFXvnS_emkPGLTrSjlmDjGOTfzZA2SNAQLjf9FvzG1OODAcoT-sIiXL5WnXawYaZKgnvoZ0Sh9mOYwmMKv2JkEX_wUFWsXhRbnfHxWkRhdf4DD4FHcbxO4oM0bPqbbwCK8rskVNwzvxwq3VdyWOzrXp5mOLvXWye8Ok-LKEYL9UG-eEJSkyHAJVU3mO0BMi_7ls_idtIG3-mZqapKdTb4XA7uqzFK_ZmjfRBjjUdI9Db3fHQObVDDqwSrZK12lasy0vatx57WZMuU"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Chota Weaver Silk Kurta</h3>
+              <p class="text-body-md font-body-md text-outline">$32</p>
+            </div>
+          </div>
+
+          <!-- Mock Product 10: Meera Mini Lehenga Set (Kids) -->
+          <div class="product-card group" data-price="64" data-title="Meera Mini Lehenga Set" data-category="Lehengas" data-fabric="Cotton" data-size="S,M" data-age="Kids" data-availability="made-to-order">
+            <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
+              <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" width="600" height="800" alt="Meera Mini Lehenga Set" src="https://lh3.googleusercontent.com/aida/ADBb0uixI8aoCa7-O8MNCoKei6qvzuwPYIePazYl37ODQSutTMFNJaFXzK6NYmBwdyXJq77vhRK_R53DLVM4cHr9rvgGh02nqh4LamwonxjvEp9HAb2j0RLOmbK9YPgXcjT_VnIcHWFM9XXBMDlvuRk0YVY-hxIuVNvxINHiKJ6uS7BoAawYi_jJ-LfQ7YAMmumSk88ZkQpA8g68EA2FywrcD1IwOE0nZUUEpd1oVpy26mhYW_vhicHEgqTVnO0lDawHhqZWMHketSJtsQ"/>
+              <div class="absolute inset-0 bg-black/5 group-hover:bg-black/15 transition-all"></div>
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col gap-2 w-[85%] opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <button class="bg-white/95 text-primary text-center py-3 text-label-md font-label-md uppercase tracking-wider shadow-lg hover:bg-primary-container hover:text-white transition-all text-[12px]">Quick View</button>
+              </div>
+            </div>
+            <div class="text-center px-2">
+              <h3 class="font-headline-md text-headline-sm text-primary mb-1">Meera Mini Lehenga Set</h3>
+              <p class="text-body-md font-body-md text-outline">$64</p>
+            </div>
+          </div>
+
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+
+  {% # 4. MOBILE DRAWER FILTERS PANEL (Hidden md+, visible mobile when toggled) %}
+  <div 
+    id="FilterDrawer" 
+    class="fixed inset-y-0 right-0 w-[380px] max-w-[90vw] bg-white z-50 shadow-2xl p-8 border-l border-outline-variant/30 flex flex-col justify-between translate-x-full transition-transform duration-300 ease-out"
+  >
+    <div class="overflow-y-auto max-h-[85vh] pr-2 custom-scrollbar">
+      <div class="flex justify-between items-center mb-8 border-b border-outline-variant/20 pb-4">
+        <h2 class="text-headline-md font-headline-md text-primary">Filters</h2>
+        <button 
+          type="button" 
+          id="FilterDrawerCloseBtn" 
+          class="text-secondary hover:text-primary transition-colors flex items-center justify-center"
+          aria-label="Close filters"
+        >
+          <span class="material-symbols-outlined text-[24px]">close</span>
+        </button>
+      </div>
+
+      {% # Render shared filters for mobile drawer %}
+      {% render 'collection-filters-ui', id_prefix: 'mobile' %}
+    </div>
+
+    {% # Mobile Drawer Actions %}
+    <div class="border-t border-outline-variant/20 pt-6 flex gap-4 bg-white">
+      <button 
+        type="button" 
+        class="ResetFiltersBtn flex-grow border border-outline/20 py-3 text-label-md font-label-md text-secondary uppercase tracking-widest hover:border-primary hover:text-primary transition-all text-[12px]"
+      >
+        Reset All
+      </button>
+      <button 
+        type="button" 
+        id="ApplyFiltersBtn" 
+        class="flex-grow bg-primary-container text-white py-3 text-label-md font-label-md uppercase tracking-widest hover:bg-primary transition-all shadow-sm text-[12px]"
+      >
+        Apply
+      </button>
+    </div>
+  </div>
+
+  {% # Drawer Backdrop Overlay %}
+  <div 
+    id="DrawerBackdrop" 
+    class="fixed inset-0 bg-black/40 z-40 hidden opacity-0 transition-opacity duration-300"
+  ></div>
+
+</section>
+
+{% # CSS Classes for Filter Styling %}
+<style>
+  /* Custom filter checkbox styling */
+  .filter-checkbox {
+    accent-color: var(--color-primary, #5a000c);
   }
-{% endstylesheet %}
+  .size-chip-btn {
+    transition: all 0.2s ease;
+  }
+  .size-chip-btn.active-chip {
+    background-color: var(--color-primary, #5a000c) !important;
+    color: #ffffff !important;
+    border-color: var(--color-primary, #5a000c) !important;
+  }
+</style>
+
+{% # 5. Interactive Clientside Javascript for Synchronized Filters & Sorting %}
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Basic elements
+    const filterBtn = document.getElementById('FilterDrawerToggleBtn');
+    const closeBtn = document.getElementById('FilterDrawerCloseBtn');
+    const drawer = document.getElementById('FilterDrawer');
+    const backdrop = document.getElementById('DrawerBackdrop');
+    const sortSelect = document.getElementById('SortSelect');
+    const grid = document.getElementById('TatsyaaProductGrid');
+    const cards = Array.from(grid.querySelectorAll('.product-card'));
+    const countDisplay = document.getElementById('ProductCount');
+
+    // Drawer Open/Close Toggles
+    const openDrawer = () => {
+      drawer.classList.remove('translate-x-full');
+      backdrop.classList.remove('hidden');
+      setTimeout(() => backdrop.classList.add('opacity-100'), 10);
+    };
+
+    const closeDrawer = () => {
+      drawer.classList.add('translate-x-full');
+      backdrop.classList.remove('opacity-100');
+      setTimeout(() => backdrop.classList.add('hidden'), 300);
+    };
+
+    if (filterBtn) filterBtn.addEventListener('click', openDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+    if (backdrop) backdrop.addEventListener('click', closeDrawer);
+
+    // Dynamic Filter State
+    let filterState = {
+      availability: [],
+      style: [],
+      age: [],
+      size: '',
+      price: 300
+    };
+
+    // Shared UI elements between Desktop sidebar and Mobile drawer
+    const syncUIAndState = (sourcePrefix, targetPrefix) => {
+      // 1. Availability sync
+      const sourceAvail = Array.from(document.querySelectorAll(`.${sourcePrefix}-avail-input:checked`)).map(el => el.value);
+      document.querySelectorAll(`.${targetPrefix}-avail-input`).forEach(el => {
+        el.checked = sourceAvail.includes(el.value);
+      });
+      filterState.availability = sourceAvail;
+
+      // 2. Style sync
+      const sourceStyle = Array.from(document.querySelectorAll(`.${sourcePrefix}-style-input:checked`)).map(el => el.value);
+      document.querySelectorAll(`.${targetPrefix}-style-input`).forEach(el => {
+        el.checked = sourceStyle.includes(el.value);
+      });
+      filterState.style = sourceStyle;
+
+      // 3. Age sync
+      const sourceAge = Array.from(document.querySelectorAll(`.${sourcePrefix}-age-input:checked`)).map(el => el.value);
+      document.querySelectorAll(`.${targetPrefix}-age-input`).forEach(el => {
+        el.checked = sourceAge.includes(el.value);
+      });
+      filterState.age = sourceAge;
+
+      // 4. Size sync
+      const sourceActiveSizeBtn = document.querySelector(`.${sourcePrefix}-size-btn.active-chip`);
+      const selectedSize = sourceActiveSizeBtn ? sourceActiveSizeBtn.getAttribute('data-size') : '';
+      document.querySelectorAll(`.${targetPrefix}-size-btn`).forEach(el => {
+        if (el.getAttribute('data-size') === selectedSize) {
+          el.classList.add('active-chip');
+        } else {
+          el.classList.remove('active-chip');
+        }
+      });
+      filterState.size = selectedSize;
+
+      // 5. Price sync
+      const sourcePriceVal = document.getElementById(`${sourcePrefix}-PriceRangeInput`).value;
+      document.getElementById(`${targetPrefix}-PriceRangeInput`).value = sourcePriceVal;
+      document.getElementById(`${targetPrefix}-PriceDisplay`).textContent = '$' + sourcePriceVal;
+      document.getElementById(`${sourcePrefix}-PriceDisplay`).textContent = '$' + sourcePriceVal;
+      filterState.price = parseInt(sourcePriceVal);
+    };
+
+    // Apply Filter Logic
+    const applyFilters = () => {
+      grid.style.opacity = '0.5';
+      setTimeout(() => {
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+          const price = parseFloat(card.getAttribute('data-price')) || 0;
+          const category = card.getAttribute('data-category') || 'All';
+          const fabric = card.getAttribute('data-fabric') || 'All';
+          const availability = card.getAttribute('data-availability') || '';
+          const sizeStr = card.getAttribute('data-size') || '';
+          const age = card.getAttribute('data-age') || 'Adults';
+
+          // Availability Filter
+          const matchesAvail = filterState.availability.length === 0 || filterState.availability.includes(availability);
+          
+          // Style Filter
+          const matchesStyle = filterState.style.length === 0 || filterState.style.includes(category);
+          
+          // Age Filter
+          const matchesAge = filterState.age.length === 0 || filterState.age.includes(age);
+          
+          // Size Filter
+          const cardSizes = sizeStr.split(',').map(s => s.trim().toUpperCase());
+          const matchesSize = filterState.size === '' || cardSizes.includes(filterState.size.toUpperCase());
+          
+          // Price Filter
+          const matchesPrice = price <= filterState.price;
+
+          // Combined check
+          if (matchesAvail && matchesStyle && matchesAge && matchesSize && matchesPrice) {
+            card.style.display = 'block';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        countDisplay.textContent = visibleCount + (visibleCount === 1 ? ' Product' : ' Products');
+        grid.style.opacity = '1';
+      }, 200);
+    };
+
+    // Listeners for Desktop inputs
+    document.querySelectorAll('[class^="desktop-"]').forEach(input => {
+      input.addEventListener('change', () => {
+        syncUIAndState('desktop', 'mobile');
+        applyFilters();
+      });
+    });
+
+    // Handle Size chip clicks in Desktop
+    document.querySelectorAll('.desktop-size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wasActive = btn.classList.contains('active-chip');
+        document.querySelectorAll('.desktop-size-btn').forEach(b => b.classList.remove('active-chip'));
+        if (!wasActive) btn.classList.add('active-chip');
+        
+        syncUIAndState('desktop', 'mobile');
+        applyFilters();
+      });
+    });
+
+    // Price input real-time value changes in Desktop
+    const desktopPriceInput = document.getElementById('desktop-PriceRangeInput');
+    desktopPriceInput.addEventListener('input', () => {
+      syncUIAndState('desktop', 'mobile');
+      applyFilters();
+    });
+
+    // Price input real-time value changes in Mobile
+    const mobilePriceInput = document.getElementById('mobile-PriceRangeInput');
+    mobilePriceInput.addEventListener('input', () => {
+      syncUIAndState('mobile', 'desktop');
+    });
+
+    // Handle Size chip clicks in Mobile
+    document.querySelectorAll('.mobile-size-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const wasActive = btn.classList.contains('active-chip');
+        document.querySelectorAll('.mobile-size-btn').forEach(b => b.classList.remove('active-chip'));
+        if (!wasActive) btn.classList.add('active-chip');
+        
+        syncUIAndState('mobile', 'desktop');
+      });
+    });
+
+    // Mobile Drawer Apply Trigger
+    const mobileApplyBtn = document.getElementById('ApplyFiltersBtn');
+    if (mobileApplyBtn) {
+      mobileApplyBtn.addEventListener('click', () => {
+        syncUIAndState('mobile', 'desktop');
+        applyFilters();
+        closeDrawer();
+      });
+    }
+
+    // Reset Buttons Trigger
+    document.querySelectorAll('.ResetFiltersBtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Reset check boxes
+        document.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+        // Reset sizes
+        document.querySelectorAll('.size-chip-btn').forEach(b => b.classList.remove('active-chip'));
+        // Reset sliders
+        document.querySelectorAll('input[type="range"]').forEach(r => {
+          r.value = 300;
+        });
+        document.querySelectorAll('[id$="-PriceDisplay"]').forEach(d => d.textContent = '$300');
+        
+        filterState = {
+          availability: [],
+          style: [],
+          age: [],
+          size: '',
+          price: 300
+        };
+
+        applyFilters();
+        closeDrawer();
+      });
+    });
+
+    // Sorting Logic
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        const criteria = sortSelect.value;
+        const sortedCards = [...cards];
+
+        sortedCards.sort((a, b) => {
+          const priceA = parseFloat(a.getAttribute('data-price')) || 0;
+          const priceB = parseFloat(b.getAttribute('data-price')) || 0;
+          const titleA = a.getAttribute('data-title').toLowerCase();
+          const titleB = b.getAttribute('data-title').toLowerCase();
+
+          if (criteria === 'price-low') {
+            return priceA - priceB;
+          } else if (criteria === 'price-high') {
+            return priceB - priceA;
+          } else if (criteria === 'title-az') {
+            return titleA.localeCompare(titleB);
+          } else {
+            return cards.indexOf(a) - cards.indexOf(b); // Default featured order
+          }
+        });
+
+        grid.style.opacity = '0.5';
+        setTimeout(() => {
+          grid.innerHTML = '';
+          sortedCards.forEach(card => grid.appendChild(card));
+          grid.style.opacity = '1';
+        }, 200);
+      });
+    }
+
+    // Initial count display
+    countDisplay.textContent = cards.length + ' Products';
+  });
+</script>
 
 {% schema %}
 {
-  "name": "t:general.collection",
+  "name": "Shop All Collection",
   "settings": []
 }
 {% endschema %}

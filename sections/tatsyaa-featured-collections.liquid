@@ -1,0 +1,154 @@
+{% comment %}
+  Tatsyaa Featured Collections
+  -------------------------------------------------------------
+  Description: Displays a grid of curated collections (3 columns on desktop, 1 on mobile).
+  Dependencies:
+    - Tailwind CSS
+    - Google Fonts (Noto Serif for headings, Manrope for labels)
+  How to use:
+    - Add the section, configure headers, and add up to 3 Custom Collection blocks.
+{% endcomment %}
+
+<section class="w-full bg-surface-container-low py-24 full-width">
+  <div class="px-margin-desktop max-w-container-max mx-auto">
+    
+    {% # Header %}
+    {% if section.settings.title != blank or section.settings.subheading != blank %}
+      <div class="text-center mb-16">
+        {% if section.settings.title != blank %}
+          <h2 class="text-headline-lg font-headline-lg text-primary mb-4">
+            {{- section.settings.title -}}
+          </h2>
+        {% endif %}
+        {% if section.settings.subheading != blank %}
+          <p class="text-body-md text-secondary">
+            {{- section.settings.subheading -}}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% # Cards Grid %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+      {% for block in section.blocks %}
+        <div class="group cursor-pointer" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.link_url | default: '#' }}" class="block">
+            <div class="relative aspect-[3/4] overflow-hidden mb-6">
+              {% if block.settings.image %}
+                {{ block.settings.image | image_url: width: 800 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110', loading: 'lazy' }}
+              {% else %}
+                {% # High-Fidelity Fallback Image per Block Index %}
+                {% if forloop.index == 1 %}
+                  <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="New Arrivals" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqV9FeeR-g1-bDuhxr7_wvMbEA-OwHKq5OqgXMoxM_HebVOSTEvaqwsVaGw2CHkxr4fBbdaibKxVyMIAkO5oEK_vYQfaOLtntCEr5vaJGnVqe9Cq6D5yCjkwm1L_rRJj5ECjwgy4--LvXx28agjiQhM2-DN5L55VxSblkqkgiExxH3vlnYmrLLL6wDYIpGH666gMri4fDV35NUxbsaB4q0c5FKCgIW4mbFS8nGjJOo_2XasfmKqUWdLJXQb7_ov5E92rTqk_U7wrto"/>
+                {% elsif forloop.index == 2 %}
+                  <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="Handloom Specials" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMvadaeXXanu5bd3yVWG7rR0NOlstinb6YtXP2OaZikkGDIA0ledF1jYGJMsRO8jBiFTov4uLSnWGY0mpOcdQFt6FlcjUbR4MBGc0qHa6_BvtNQR5s4ZC-OHtFAg2Jqqj8aFmdFExxKjDnWAlzCF9LE3y9dyCKycWIlAdihgRd-dQ3KQ4JOGWUXkj5j8vWe-qQSn9uu9i9xoAq9Oo2tDpCNrcGQTLuNBwfDRxDugjx7ajb2CD3ge2dewZmlfuUCSxeiBW4l6K04mx_"/>
+                {% else %}
+                  <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="Heritage Silks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSaaYOf0_hfwHQfyx2AGkTOmqBEau4hPEwrQ2dlTB1whM_PnwieRsA4o_In2mz7p6-O5ybEvyNszfaSAo1aQ3Qqn9R8aP72Q1ubUOT482K-dhUJusR319JB-Po2htKycrGqc6Ceu7FT30flKKmA7yhJhDA0VYuR4rmJy9ciJFrj2IIY49PPRjpdz6hAB-wWDJstM2D-oZtEZc-uZHWmz23Rgm_-dceJ_CnTM448FpvlALvCFmOpz0ySadAMFbYTGx7lf30npmVKeDo"/>
+                {% endif %}
+              {% endif %}
+              <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>
+            </div>
+            
+            {% if block.settings.title != blank %}
+              <h3 class="text-headline-md font-headline-md text-primary mb-2">
+                {{- block.settings.title -}}
+              </h3>
+            {% endif %}
+            
+            {% if block.settings.subtitle != blank %}
+              <p class="text-label-md text-secondary uppercase tracking-widest">
+                {{- block.settings.subtitle -}}
+              </p>
+            {% endif %}
+          </a>
+        </div>
+      {% else %}
+        {% # Blank State placeholder instructions %}
+        <div class="col-span-3 text-center py-10">
+          <p class="text-secondary">Please add "Collection Card" blocks to populate this curated grid.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Edits Grid",
+  "max_blocks": 3,
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Section Heading",
+      "default": "Curated Edits"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Section Subheading",
+      "default": "Discover the essence of modern heritage through our selected themes."
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Collection Card",
+      "type": "collection_card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Card Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Collection Title",
+          "default": "Curated Edit"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Collection Subtitle",
+          "default": "Summer Serenade '24"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Target URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Edits Grid",
+      "category": "Grid",
+      "blocks": [
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "New Arrivals",
+            "subtitle": "Summer Serenade '24"
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Handloom Specials",
+            "subtitle": "The Weaver's Mark"
+          }
+        },
+        {
+          "type": "collection_card",
+          "settings": {
+            "title": "Heritage Silks",
+            "subtitle": "Eternal Drape"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

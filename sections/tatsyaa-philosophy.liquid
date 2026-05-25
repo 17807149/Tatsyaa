@@ -1,0 +1,138 @@
+{% comment %}
+  Tatsyaa Philosophy Section
+  -------------------------------------------------------------
+  Description: Displays a high-fidelity overlapping two-image brand story panel with curated editorial text.
+  Dependencies:
+    - Tailwind CSS
+    - Google Fonts (Noto Serif for headings, Manrope for sans text)
+  How to use:
+    - Customise overlapping images, descriptions, philosophy labels, and text block placement.
+{% endcomment %}
+
+<section class="py-24 px-margin-desktop max-w-container-max mx-auto overflow-hidden">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-center">
+    
+    {% # Image column (conditional rendering on order) %}
+    <div class="relative {% if section.settings.image_position == 'right' %}lg:order-last{% endif %}" data-aos="fade-right">
+      <div class="aspect-[4/5] bg-surface-container-high relative overflow-hidden">
+        {% if section.settings.main_image %}
+          {{ section.settings.main_image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-all duration-700 hover:scale-105', loading: 'lazy' }}
+        {% else %}
+          <img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" width="1200" height="1500" alt="Main Philosophy Image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsyBvpd-qdJYbAsxa0MTetaGfVhWqBpN5tK_8fgIzeUuGExXhfpXgQYuBfNEntWD8z2FCD6ybmsac0NmSgQgJtAkLWCaE3fehAATSGgH6CEREqc0GisvIU2brFFbJPEMsNR6lwvCgthzeZB_cq1A92vNVaa4QR2b9Z7OmTbHfWg3wwFJLOAnszC3hqa8yiO1rYCNwMHTAV0O6Hfrcn3KVpW7YTm6cQUC6K3tKEq1Nw5Z0YOTk19R3Cnk3cYvMl8-rhlNTWf9gKD6TW"/>
+        {% endif %}
+      </div>
+      
+      <div class="absolute -bottom-10 -right-10 hidden lg:block w-64 h-80 bg-surface-container-lowest border border-outline-variant/30 p-2 shadow-sm">
+        {% if section.settings.secondary_image %}
+          {{ section.settings.secondary_image | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+        {% else %}
+          <img class="w-full h-full object-cover" width="600" height="800" alt="Secondary Weave Image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDUXzZjoRcxB2UGKt4RgBIRxiKJmsYs5uYPn_x-1xLffwC_7bFLzu-g3fvn8i2QQyiV3ninuE577tStUD70yVL2yU8wPDEmnB3Ru7wvp1v5VZsrIYlzjqvCXR8pG1ZUatJ4kp9jHnyB-4BKIAKiDdZ0JyPXSpCk2aQBeeDpWSNFwKnQhd7ROoCD0wijXpGBuMEjCot_Q7O7bn8lHE1vvrkfxrxuWIup58wgKvr-PuxH5prJ17ROMXpnrCGrjB_xKrOqT3lntXnOCZs"/>
+        {% endif %}
+      </div>
+    </div>
+
+    {% # Text column %}
+    <div class="space-y-8" data-aos="fade-left">
+      {% if section.settings.badge != blank %}
+        <div class="inline-block px-4 py-1 bg-surface-container-low text-primary text-label-md font-label-md border border-outline-variant/20">
+          {{- section.settings.badge -}}
+        </div>
+      {% endif %}
+
+      {% if section.settings.title != blank %}
+        <h2 class="text-display-lg font-display-lg text-primary">
+          {{- section.settings.title -}}
+        </h2>
+      {% endif %}
+
+      {% if section.settings.body_text_1 != blank %}
+        <p class="text-body-lg text-secondary leading-relaxed">
+          {{- section.settings.body_text_1 -}}
+        </p>
+      {% endif %}
+
+      {% if section.settings.body_text_2 != blank %}
+        <p class="text-body-md text-on-surface-variant">
+          {{- section.settings.body_text_2 -}}
+        </p>
+      {% endif %}
+
+      {% if section.settings.link_text != blank %}
+        <a class="inline-flex items-center gap-2 text-primary font-label-md uppercase tracking-widest group border-b border-primary/20 pb-1" href="{{ section.settings.link_url | default: '#' }}">
+          {{- section.settings.link_text -}}
+          <span class="material-symbols-outlined transition-transform group-hover:translate-x-2">arrow_right_alt</span>
+        </a>
+      {% endif %}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Tatsyaa Brand Story",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "main_image",
+      "label": "Main Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "secondary_image",
+      "label": "Overlapping Thumbnail (Silk Weave Close-up)"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Alignment",
+      "options": [
+        { "value": "left", "label": "Image Left, Text Right" },
+        { "value": "right", "label": "Text Left, Image Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "badge",
+      "label": "Badge Content",
+      "default": "Our Philosophy"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Curating India's Finest Homegrown Designers"
+    },
+    {
+      "type": "textarea",
+      "id": "body_text_1",
+      "label": "Primary Story Block",
+      "default": "Tatsyaa is born from a desire to bridge the gap between ancient Indian craftsmanship and the discerning modern woman. We travel to the heart of India's textile hubs, partnering with master weavers and contemporary designers who breathe new life into heritage techniques."
+    },
+    {
+      "type": "textarea",
+      "id": "body_text_2",
+      "label": "Secondary Story Details",
+      "default": "Each piece in our collection is a labor of love, representing hours of meticulous embroidery, hand-dyeing, and precision tailoring. We don't just sell clothes; we narrate stories of cultural resilience and artistic evolution."
+    },
+    {
+      "type": "text",
+      "id": "link_text",
+      "label": "Call to Action Text",
+      "default": "Read Our Story"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Call to Action Destination"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tatsyaa Brand Story",
+      "category": "Content"
+    }
+  ]
+}
+{% endschema %}

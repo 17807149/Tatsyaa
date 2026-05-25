@@ -1,0 +1,117 @@
+{% comment %}
+  Renders the collection filters UI panel.
+  Parameters:
+    - id_prefix: 'desktop' or 'mobile'
+{% endcomment %}
+
+<div class="space-y-8 text-left">
+
+  {% # 1. Availability Sub-section %}
+  <div class="border-b border-outline-variant/20 pb-6">
+    <h3 class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4 text-[13px]">Availability</h3>
+    <div class="space-y-3">
+      <label class="flex items-center gap-3 cursor-pointer text-body-md text-secondary hover:text-primary transition-colors text-[14px]">
+        <input 
+          type="checkbox" 
+          value="in-stock" 
+          class="{{ id_prefix }}-avail-input filter-checkbox h-4 w-4 border-outline/30 text-primary focus:ring-primary"
+          aria-label="Filter In Stock items"
+        />
+        <span>In Stock</span>
+      </label>
+      <label class="flex items-center gap-3 cursor-pointer text-body-md text-secondary hover:text-primary transition-colors text-[14px]">
+        <input 
+          type="checkbox" 
+          value="made-to-order" 
+          class="{{ id_prefix }}-avail-input filter-checkbox h-4 w-4 border-outline/30 text-primary focus:ring-primary"
+          aria-label="Filter Made to Order items"
+        />
+        <span>Made to Order</span>
+      </label>
+    </div>
+  </div>
+
+  {% # 2. Style Sub-section %}
+  <div class="border-b border-outline-variant/20 pb-6">
+    <h3 class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4 text-[13px]">Style</h3>
+    <div class="space-y-3">
+      {% assign styles_list = "Tunics,Waistcoats,Suits,Dupattas,Kurtas,Anarkalis,Lehengas" | split: "," %}
+      {% for style in styles_list %}
+        <label class="flex items-center gap-3 cursor-pointer text-body-md text-secondary hover:text-primary transition-colors text-[14px]">
+          <input 
+            type="checkbox" 
+            value="{{ style }}" 
+            class="{{ id_prefix }}-style-input filter-checkbox h-4 w-4 border-outline/30 text-primary focus:ring-primary"
+            aria-label="Filter {{ style }} style"
+          />
+          <span>{{ style }}</span>
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% # 3. Age Group Sub-section %}
+  <div class="border-b border-outline-variant/20 pb-6">
+    <h3 class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4 text-[13px]">Age Group</h3>
+    <div class="space-y-3">
+      <label class="flex items-center gap-3 cursor-pointer text-body-md text-secondary hover:text-primary transition-colors text-[14px]">
+        <input 
+          type="checkbox" 
+          value="Adults" 
+          class="{{ id_prefix }}-age-input filter-checkbox h-4 w-4 border-outline/30 text-primary focus:ring-primary"
+          aria-label="Filter Adults age group"
+        />
+        <span>Adults</span>
+      </label>
+      <label class="flex items-center gap-3 cursor-pointer text-body-md text-secondary hover:text-primary transition-colors text-[14px]">
+        <input 
+          type="checkbox" 
+          value="Kids" 
+          class="{{ id_prefix }}-age-input filter-checkbox h-4 w-4 border-outline/30 text-primary focus:ring-primary"
+          aria-label="Filter Kids age group"
+        />
+        <span>Kids</span>
+      </label>
+    </div>
+  </div>
+
+  {% # 4. Size Sub-section %}
+  <div class="border-b border-outline-variant/20 pb-6">
+    <h3 class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4 text-[13px]">Size</h3>
+    <div class="grid grid-cols-3 gap-2">
+      {% assign sizes_list = "XS,S,M,L,XL,XXL" | split: "," %}
+      {% for size in sizes_list %}
+        <button 
+          type="button" 
+          data-size="{{ size }}" 
+          class="{{ id_prefix }}-size-btn size-chip-btn border border-outline/20 py-2 text-center text-label-md font-label-md text-secondary hover:border-primary hover:text-primary transition-all text-[12px]"
+          aria-label="Filter size {{ size }}"
+        >
+          {{ size }}
+        </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% # 5. Price Range Sub-section %}
+  <div class="pb-4">
+    <h3 class="text-label-md font-label-md uppercase tracking-widest text-primary mb-4 text-[13px]">Price Range</h3>
+    <div class="space-y-4">
+      <input 
+        type="range" 
+        id="{{ id_prefix }}-PriceRangeInput" 
+        min="0" 
+        max="300" 
+        step="10" 
+        value="300"
+        class="w-full accent-primary cursor-pointer h-1.5 bg-surface-container-high rounded-lg appearance-none"
+        aria-label="Price range filter slider"
+      />
+      <div class="flex justify-between items-center text-body-md text-secondary text-[13px]">
+        <span>Min: $0</span>
+        <span id="{{ id_prefix }}-PriceDisplay" class="text-primary font-semibold text-[14px]">$300</span>
+      </div>
+    </div>
+  </div>
+
+</div>

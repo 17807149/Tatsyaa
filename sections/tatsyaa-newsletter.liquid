@@ -1,0 +1,113 @@
+{% comment %}
+  Tatsyaa Newsletter Signup Section
+  -------------------------------------------------------------
+  Description: Renders a premium brand subscription form utilizing Shopify's native customer tag features.
+  Dependencies:
+    - Tailwind CSS classes
+    - Google Fonts (Noto Serif, Manrope)
+  How to use:
+    - Add to page. Subscribed email addresses are saved as customer leads in the Shopify Admin.
+{% endcomment %}
+
+<section class="w-full py-24 bg-surface-container-highest full-width">
+  <div class="px-margin-desktop max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+    
+    {% # Text Column %}
+    <div>
+      {% if section.settings.title != blank %}
+        <h2 class="text-headline-lg font-headline-lg text-primary mb-4">
+          {{- section.settings.title -}}
+        </h2>
+      {% endif %}
+      
+      {% if section.settings.subheading != blank %}
+        <p class="text-body-md text-on-surface-variant">
+          {{- section.settings.subheading -}}
+        </p>
+      {% endif %}
+    </div>
+
+    {% # Form Column %}
+    <div>
+      {% form 'customer', class: 'w-full' %}
+        
+        {% if form.posted_successfully? %}
+          <div class="p-4 mb-4 text-sm text-green-700 bg-green-50 rounded-sm border border-green-200">
+            Thank you for joining our exclusive circle! Please check your email inbox to confirm your membership.
+          </div>
+        {% endif %}
+        
+        {% if form.errors %}
+          <div class="p-4 mb-4 text-sm text-red-700 bg-red-50 rounded-sm border border-red-200">
+            {{ form.errors | default_errors }}
+          </div>
+        {% endif %}
+        
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        
+        <div class="flex gap-0">
+          <input 
+            type="email" 
+            name="contact[email]" 
+            id="NewsletterEmail"
+            class="flex-grow bg-white border border-outline-variant/30 px-6 py-4 focus:ring-1 focus:ring-primary focus:border-primary outline-none text-body-md"
+            placeholder="{{ section.settings.placeholder }}"
+            value="{{ form.email }}"
+            aria-label="Email Address"
+            required
+            autocorrect="off"
+            autocapitalize="off"
+          />
+          <button 
+            type="submit" 
+            name="commit" 
+            id="SubscribeButton"
+            class="bg-primary-container text-white px-8 py-4 font-label-md uppercase tracking-widest hover:bg-primary transition-all"
+          >
+            {{- section.settings.button_text -}}
+          </button>
+        </div>
+        
+      {% endform %}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Tatsyaa Newsletter",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "The Tatsyaa Circle"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Join our exclusive community for early access to new collections, artisanal stories, and private events."
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Email Placeholder Text",
+      "default": "Enter your email address"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button Label",
+      "default": "Subscribe"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tatsyaa Newsletter",
+      "category": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

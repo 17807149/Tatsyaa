@@ -1,0 +1,232 @@
+{% comment %}
+  Tatsyaa Luxury Editorial Contact Us Page
+  -------------------------------------------------------------
+  Description: A high-fidelity, premium contact concierge page styled according to modern heritage aesthetic.
+  Features:
+    - Symmetrical breadcrumbs and headline.
+    - Two-column layout: fully functional shopify contact form on the left, luxury showroom ateliers on the right.
+    - Custom styled select dropdowns, input outlines, and WhatsApp direct styling.
+    - Bottom brand heritage weaving quote banner.
+{% endcomment %}
+
+<section class="w-full bg-white py-16 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto full-width" id="TatsyaaContactSection">
+  
+  {% # 1. Symmetrical Top Header %}
+  <div class="text-center max-w-3xl mx-auto mb-12">
+    {% # Breadcrumbs %}
+    <nav class="flex justify-center items-center gap-2 mb-4 text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.2em] text-[#8b716f]" aria-label="Breadcrumbs">
+      <a href="{{ routes.root_url }}" class="hover:text-[#5a000c] transition-colors">Home</a>
+      <span class="text-neutral-400 select-none">/</span>
+      <span class="text-[#5a000c]">Contact Concierge</span>
+    </nav>
+
+    {% # Page Title %}
+    <h1 class="text-headline-lg md:text-[40px] font-normal text-[#5a000c] tracking-tight leading-tight" style="font-family: 'Noto Serif', serif; text-transform: none;">
+      Connect with Tatsyaa
+    </h1>
+    
+    {% # Subtitle paragraph %}
+    <p class="mt-4 text-body-md md:text-body-lg text-secondary leading-relaxed max-w-2xl mx-auto" style="font-family: 'Manrope', sans-serif;">
+      Our customer concierge is at your disposal for sizing questions, custom commissions, or personal appointments at our Indian ateliers.
+    </p>
+  </div>
+
+  {% # 2. Two-Column Layout Grid %}
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 border-t border-neutral-100 pt-12">
+    
+    {% # Left Column: Shopify Interactive Contact Form %}
+    <div class="bg-white">
+      <h2 class="font-headline-md text-headline-sm text-primary mb-6" style="font-family: 'Noto Serif', serif; text-transform: none;">
+        Send an Inquiry
+      </h2>
+
+      {% form 'contact' %}
+        {%- if form.posted_successfully? -%}
+          <div class="p-5 bg-green-50/80 border border-green-200 text-green-800 text-[14px] font-medium rounded-lg mb-6 leading-relaxed flex items-center gap-3">
+            <span class="material-symbols-outlined text-[20px] text-green-600">check_circle</span>
+            <span>Thank you for reaching out. A Tatsyaa Personal Concierge will contact you within 24 hours.</span>
+          </div>
+        {%- elsif form.errors -%}
+          <div class="p-5 bg-red-50/80 border border-red-200 text-red-800 text-[14px] rounded-lg mb-6 leading-relaxed">
+            {{ form.errors | default_errors }}
+          </div>
+        {%- endif -%}
+
+        <div class="space-y-6 text-left">
+          {% # Row 1: Name %}
+          <div>
+            <label for="ContactFormName" class="block text-[11px] font-bold uppercase tracking-wider text-[#5a000c] mb-2" style="font-family: 'Manrope', sans-serif;">
+              Your Name
+            </label>
+            <input 
+              type="text" 
+              name="contact[name]" 
+              id="ContactFormName" 
+              placeholder="e.g. Ananya Sen"
+              class="w-full bg-white border border-[#dfbfbd] px-5 py-3.5 text-body-md text-on-surface placeholder:text-neutral-400 outline-none transition-all rounded-lg focus:border-[#5a000c] focus:ring-1 focus:ring-[#5a000c]"
+              style="font-family: 'Manrope', sans-serif;"
+              value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
+            />
+          </div>
+
+          {% # Row 2: Email & Phone Grid %}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label for="ContactFormEmail" class="block text-[11px] font-bold uppercase tracking-wider text-[#5a000c] mb-2" style="font-family: 'Manrope', sans-serif;">
+                Email Address <span class="text-primary">*</span>
+              </label>
+              <input 
+                type="email" 
+                name="contact[email]" 
+                id="ContactFormEmail" 
+                placeholder="e.g. ananya@example.com"
+                class="w-full bg-white border border-[#dfbfbd] px-5 py-3.5 text-body-md text-on-surface placeholder:text-neutral-400 outline-none transition-all rounded-lg focus:border-[#5a000c] focus:ring-1 focus:ring-[#5a000c]"
+                style="font-family: 'Manrope', sans-serif;"
+                value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"
+                required
+                aria-required="true"
+              />
+            </div>
+            <div>
+              <label for="ContactFormPhone" class="block text-[11px] font-bold uppercase tracking-wider text-[#5a000c] mb-2" style="font-family: 'Manrope', sans-serif;">
+                Phone Number
+              </label>
+              <input 
+                type="tel" 
+                name="contact[phone]" 
+                id="ContactFormPhone" 
+                placeholder="e.g. +91 98765 43210"
+                class="w-full bg-white border border-[#dfbfbd] px-5 py-3.5 text-body-md text-on-surface placeholder:text-neutral-400 outline-none transition-all rounded-lg focus:border-[#5a000c] focus:ring-1 focus:ring-[#5a000c]"
+                style="font-family: 'Manrope', sans-serif;"
+                value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}"
+              />
+            </div>
+          </div>
+
+          {% # Row 3: Subject Dropdown Selection %}
+          <div>
+            <label for="ContactFormSubject" class="block text-[11px] font-bold uppercase tracking-wider text-[#5a000c] mb-2" style="font-family: 'Manrope', sans-serif;">
+              Subject of Inquiry
+            </label>
+            <select 
+              name="contact[subject]" 
+              id="ContactFormSubject" 
+              class="w-full bg-white border border-[#dfbfbd] px-5 py-3.5 text-body-md text-on-surface outline-none transition-all rounded-lg focus:border-[#5a000c] focus:ring-1 focus:ring-[#5a000c]"
+              style="font-family: 'Manrope', sans-serif;"
+            >
+              <option value="General Inquiry" selected>General Inquiry</option>
+              <option value="Bespoke Design / Custom Couture">Bespoke Design / Custom Couture</option>
+              <option value="Sizing & Fit Consultation">Sizing & Fit Consultation</option>
+              <option value="Master Weaver Story Inquiries">Master Weaver Story Inquiries</option>
+              <option value="Order Tracking & Logistics">Order Tracking & Logistics</option>
+            </select>
+          </div>
+
+          {% # Row 4: Message Textbox %}
+          <div>
+            <label for="ContactFormMessage" class="block text-[11px] font-bold uppercase tracking-wider text-[#5a000c] mb-2" style="font-family: 'Manrope', sans-serif;">
+              Your Message <span class="text-primary">*</span>
+            </label>
+            <textarea 
+              rows="6" 
+              name="contact[body]" 
+              id="ContactFormMessage" 
+              placeholder="Please describe how our atelier concierge can assist you..."
+              class="w-full bg-white border border-[#dfbfbd] px-5 py-3.5 text-body-md text-on-surface placeholder:text-neutral-400 outline-none transition-all rounded-lg focus:border-[#5a000c] focus:ring-1 focus:ring-[#5a000c] resize-none"
+              style="font-family: 'Manrope', sans-serif;"
+              required
+              aria-required="true"
+            >{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+
+          {% # Row 5: Submit CTA Button %}
+          <div class="pt-2">
+            <button 
+              type="submit" 
+              class="w-full bg-[#5a000c] text-white py-4 px-10 text-[13px] font-semibold uppercase tracking-widest hover:bg-[#7f0f1b] transition-all duration-300 rounded-lg shadow-sm flex items-center justify-center gap-2"
+              style="font-family: 'Manrope', sans-serif;"
+            >
+              <span>Submit Inquiry</span>
+              <span class="material-symbols-outlined text-[18px]">arrow_right_alt</span>
+            </button>
+          </div>
+
+        </div>
+      {% endform %}
+    </div>
+
+    {% # Right Column: Flagship Ateliers & Direct Concierge Details %}
+    <div class="space-y-10 lg:pl-6 text-left border-t lg:border-t-0 lg:border-l border-neutral-100 pt-10 lg:pt-0 lg:pl-10">
+      
+      {% # 1. Atelier 1: New Delhi Flagship %}
+      <div>
+        <h3 class="text-primary text-[18px] font-medium mb-3 flex items-center gap-2" style="font-family: 'Noto Serif', serif; text-transform: none;">
+          <span class="material-symbols-outlined text-[20px] text-[#8b716f]">location_on</span>
+          <span>New Delhi Flagship Atelier</span>
+        </h3>
+        <div class="text-body-md text-secondary space-y-2 pl-7" style="font-family: 'Manrope', sans-serif;">
+          <p class="text-[#1a1b22] font-medium leading-relaxed">A-12, Hauz Khas Village, New Delhi - 110016</p>
+          <p class="leading-relaxed">Phone: <a href="tel:+911140592929" class="hover:text-primary transition-colors font-medium text-neutral-800">+91 11 4059 2929</a></p>
+          <p class="leading-relaxed">Atelier Email: <a href="mailto:delhi@tatsyaa.com" class="hover:text-primary transition-colors font-medium text-neutral-800">delhi@tatsyaa.com</a></p>
+          <p class="text-[13px] text-neutral-500 italic mt-1">Open Monday - Saturday: 11:00 AM - 7:30 PM (IST)</p>
+        </div>
+      </div>
+
+      {% # 2. Atelier 2: Mumbai Showroom %}
+      <div>
+        <h3 class="text-primary text-[18px] font-medium mb-3 flex items-center gap-2" style="font-family: 'Noto Serif', serif; text-transform: none;">
+          <span class="material-symbols-outlined text-[20px] text-[#8b716f]">location_on</span>
+          <span>Mumbai Colonial Atelier</span>
+        </h3>
+        <div class="text-body-md text-secondary space-y-2 pl-7" style="font-family: 'Manrope', sans-serif;">
+          <p class="text-[#1a1b22] font-medium leading-relaxed">Heritage Wing, Taj Mahal Palace Hotel, Apollo Bunder, Mumbai - 400001</p>
+          <p class="leading-relaxed">Phone: <a href="tel:+912266653366" class="hover:text-primary transition-colors font-medium text-neutral-800">+91 22 6665 3366</a></p>
+          <p class="leading-relaxed">Atelier Email: <a href="mailto:mumbai@tatsyaa.com" class="hover:text-primary transition-colors font-medium text-neutral-800">mumbai@tatsyaa.com</a></p>
+          <p class="text-[13px] text-neutral-500 italic mt-1">Open Monday - Sunday: 11:00 AM - 8:00 PM (IST)</p>
+        </div>
+      </div>
+
+      {% # 3. WhatsApp Direct Consulting Highlight (High-Fidelity) %}
+      <div class="bg-[#f4f2fd]/50 border border-[#dfbfbd]/35 p-6 rounded-lg">
+        <h3 class="text-primary text-[16px] font-semibold mb-2 flex items-center gap-2" style="font-family: 'Noto Serif', serif; text-transform: none;">
+          <span class="material-symbols-outlined text-[20px] text-green-600">chat</span>
+          <span>Direct WhatsApp Stylist Consultation</span>
+        </h3>
+        <p class="text-body-md text-secondary leading-relaxed mb-4" style="font-family: 'Manrope', sans-serif;">
+          For instant consultations on sizing customizations, handloom weaves, or special wedding orders, chat directly with a Tatsyaa personal stylist.
+        </p>
+        <a 
+          href="https://wa.me/919876543210" 
+          target="_blank" 
+          rel="noopener"
+          class="inline-flex w-full justify-center items-center gap-2 border border-[#5a000c] text-[#5a000c] hover:bg-[#5a000c] hover:text-white transition-all py-3.5 px-6 font-semibold uppercase tracking-wider text-[12px] rounded-lg"
+          style="font-family: 'Manrope', sans-serif;"
+        >
+          <span>Chat on WhatsApp</span>
+          <span class="material-symbols-outlined text-[16px]">open_in_new</span>
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+  {% # 3. Bottom Philosophy Watermark Banner %}
+  <div class="w-full bg-[#f4f2fd]/60 rounded-xl py-12 px-8 md:px-12 text-center mt-16 max-w-container-max mx-auto">
+    <span class="material-symbols-outlined text-[32px] text-[#5a000c]/30 select-none mb-3">auto_awesome</span>
+    <h3 class="text-[20px] italic text-[#5a000c] font-normal leading-relaxed mb-3" style="font-family: 'Noto Serif', serif;">
+      "Weaving heritage threads into the fabric of today."
+    </h3>
+    <p class="text-body-md text-neutral-600 leading-relaxed max-w-3xl mx-auto" style="font-family: 'Manrope', sans-serif;">
+      Each Tatsyaa ensemble is crafted in collaboration with master weavers, protecting and promoting the age-old heritage looms of Benares, Chanderi, and Maheshwar. If you have bespoke adjustments, our tailors partner directly with you to craft a piece uniquely yours.
+    </p>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "name": "Tatsyaa Contact Concierge",
+  "settings": []
+}
+{% endschema %}
