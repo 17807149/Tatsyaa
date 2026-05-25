@@ -92,10 +92,10 @@
         {% endif %}
         
         {% # Subtle Interactive Color Overlay Toggle (Fidelity Mock) %}
-        <div class="absolute bottom-6 left-6 flex space-x-3 bg-white/80 backdrop-blur px-4 py-2.5 rounded-full border border-white">
-          <button class="w-6 h-6 border border-neutral-300 rounded-full bg-[#f4e04d] hover:scale-110 transition-transform cursor-pointer" aria-label="Sunflower Yellow" onclick="changeColor('yellow', this)"></button>
-          <button class="w-6 h-6 border border-neutral-300 rounded-full bg-[#d26c8b] hover:scale-110 transition-transform cursor-pointer" aria-label="Vintage Rose" onclick="changeColor('pink', this)"></button>
-          <button class="w-6 h-6 border border-neutral-300 rounded-full bg-[#f5f5dc] hover:scale-110 transition-transform cursor-pointer" aria-label="Pristine Cream" onclick="changeColor('cream', this)"></button>
+        <div class="absolute bottom-6 left-6 flex space-x-3 bg-white/80 backdrop-blur px-4 py-2.5 rounded-lg border border-white">
+          <button class="w-6 h-6 border border-neutral-300 rounded bg-[#f4e04d] hover:scale-110 transition-transform cursor-pointer" aria-label="Sunflower Yellow" onclick="changeColor('yellow', this)"></button>
+          <button class="w-6 h-6 border border-neutral-300 rounded bg-[#d26c8b] hover:scale-110 transition-transform cursor-pointer" aria-label="Vintage Rose" onclick="changeColor('pink', this)"></button>
+          <button class="w-6 h-6 border border-neutral-300 rounded bg-[#f5f5dc] hover:scale-110 transition-transform cursor-pointer" aria-label="Pristine Cream" onclick="changeColor('cream', this)"></button>
         </div>
       </div>
 
@@ -166,9 +166,9 @@
             Color: <span class="text-on-background font-bold text-neutral-800" id="TatsyaaColorLabel">Sunflower Yellow</span>
           </p>
           <div class="flex space-x-3">
-            <button type="button" class="w-9 h-9 rounded-full bg-[#f4e04d] ring-2 ring-offset-2 ring-[#5a000c] transition-all cursor-pointer" onclick="selectColorOption('yellow', 'Sunflower Yellow', this)"></button>
-            <button type="button" class="w-9 h-9 rounded-full bg-[#d26c8b] ring-0 ring-offset-2 ring-transparent transition-all cursor-pointer" onclick="selectColorOption('pink', 'Vintage Rose', this)"></button>
-            <button type="button" class="w-9 h-9 rounded-full bg-[#f5f5dc] ring-0 ring-offset-2 ring-transparent transition-all cursor-pointer" onclick="selectColorOption('cream', 'Pristine Cream', this)"></button>
+            <button type="button" class="w-9 h-9 rounded-lg bg-[#f4e04d] ring-2 ring-offset-2 ring-[#5a000c] transition-all cursor-pointer" onclick="selectColorOption('yellow', 'Sunflower Yellow', this)"></button>
+            <button type="button" class="w-9 h-9 rounded-lg bg-[#d26c8b] ring-0 ring-offset-2 ring-transparent transition-all cursor-pointer" onclick="selectColorOption('pink', 'Vintage Rose', this)"></button>
+            <button type="button" class="w-9 h-9 rounded-lg bg-[#f5f5dc] ring-0 ring-offset-2 ring-transparent transition-all cursor-pointer" onclick="selectColorOption('cream', 'Pristine Cream', this)"></button>
           </div>
         </div>
 
