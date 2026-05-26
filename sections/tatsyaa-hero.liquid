@@ -15,7 +15,7 @@
     {% if section.settings.background_image %}
       {{ section.settings.background_image | image_url: width: 2500 | image_tag: class: 'w-full h-full object-cover', loading: 'eager', fetchpriority: 'high' }}
     {% else %}
-      <img alt="Hero Background Placeholder" width="1920" height="1080" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAnaM6vScLJoKa1L5H5K1AKIi0ubwNiLFGiRXsP70rFH76lwlqozMem0difvrCCn7FPYKLmhn5oz5wKUJn4xSiJ2bKYVD9u3fRWvHxkGIGzYY1gb_QfMAJsijn-a1uvZ1g0D3qDWqK9tFZdyQBfaeO2c4ylA67erURZRPO6dC6qZS2ICTvztz7nmR5kclykcA3_59Z9dkouwFMo-LdC6RMwpvcNaC-ccSlNUk3z-LEYWNYDoPLYiXdui42DU7HCFSgH3UeJ_b9H5kvq"/>
+      <img alt="Hero Background" width="1920" height="1080" class="w-full h-full object-cover" src="{{ 'hero-bg.jpg' | asset_url }}" loading="eager" fetchpriority="high"/>
     {% endif %}
     <div class="absolute inset-0 hero-gradient"></div>
   </div>
