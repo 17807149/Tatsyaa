@@ -17,7 +17,17 @@
     
     {% # Column 1: Brand Info & Socials %}
     <div class="col-span-1 md:col-span-2">
-      <h2 class="text-headline-md font-headline-md text-primary dark:text-inverse-primary mb-6">Tatsyaa</h2>
+      <div class="mb-6">
+        <a class="block leading-none select-none" href="{{ routes.root_url }}">
+          <img 
+            src="{{ 'tatsyaa-logo.png' | asset_url }}" 
+            alt="Tatsyaa" 
+            width="120" 
+            height="48"
+            class="h-10 w-auto object-contain"
+          />
+        </a>
+      </div>
       <p class="text-body-md text-on-surface-variant max-w-md mb-8">
         Curating India's Finest Homegrown Designers. Bringing the soul of traditional Indian craftsmanship to the contemporary global stage.
       </p>

@@ -27,13 +27,18 @@
         <span class="material-symbols-outlined text-[24px]">menu</span>
       </button>
 
-      {% # Designer Brand Logo (Capitalized, Serif font) %}
+      {% # Designer Brand Logo (Image Asset) %}
       <div class="flex-shrink-0">
-        <a class="text-primary text-[26px] md:text-[30px] font-normal transition-all hover:opacity-90 leading-none select-none" style="font-family: 'Noto Serif', serif; text-transform: none; color: #5a000c; letter-spacing: -0.012em;" href="{{ routes.root_url }}">
-          Tatsyaa
+        <a class="block transition-all hover:opacity-90 leading-none select-none" href="{{ routes.root_url }}">
+          <img 
+            src="{{ 'tatsyaa-logo.png' | asset_url }}" 
+            alt="Tatsyaa" 
+            width="120" 
+            height="48"
+            class="h-10 md:h-12 w-auto object-contain"
+          />
         </a>
       </div>
-
       {% # Desktop Navigation Links (Desktop Only) %}
       <div class="hidden md:flex items-center gap-6 lg:gap-8">
         {% for link in section.settings.menu.links %}
