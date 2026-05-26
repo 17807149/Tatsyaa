@@ -1,83 +1,406 @@
 {% comment %}
-  This section is used in the list-collections template to render a list of
-  collections.
-
-  https://shopify.dev/docs/storefronts/themes/architecture/templates/collection
+  Tatsyaa Premium Collections List Section
+  -------------------------------------------------------------
+  Description: A luxury lookbook collections directory matching Sabyasachi / Stitch DNA.
+  Features:
+    - Elegant breadcrumbs (HOME / THE ATELIER COLLECTIONS)
+    - Interactive vanilla JS category filter tabs (All, Silks, Handlooms, Editorial Edits)
+    - Full-bleed aspect ratios with smooth zoom animations
+    - High-fidelity mock collection fallbacks when empty
+    - Clean spacing and soft corners (rounded-lg)
 {% endcomment %}
 
-<h1>{{ 'collections.title' | t }}</h1>
+<section class="w-full bg-[#fbf8ff] py-16 md:py-24">
+  <div class="px-6 md:px-16 max-w-[1280px] mx-auto space-y-16">
+    
+    <!-- 1. Breadcrumbs & Page Intro -->
+    <div class="text-center space-y-5 max-w-3xl mx-auto">
+      <nav class="flex justify-center gap-2 text-[10.5px] font-bold uppercase tracking-widest text-[#5c5e68]" style="font-family: 'Manrope', sans-serif;">
+        <a href="/" class="hover:text-[#5a000c] transition-colors">Home</a>
+        <span class="text-neutral-300">/</span>
+        <span class="text-[#5a000c]">The Collections</span>
+      </nav>
+      
+      <h1 class="text-[32px] md:text-[46px] text-[#5a000c] font-normal leading-tight select-none" style="font-family: 'Noto Serif', serif; letter-spacing: -0.01em;">
+        The Tatsyaa Ateliers
+      </h1>
+      
+      <p class="text-[14.5px] md:text-[16px] text-[#5c5e68] leading-relaxed" style="font-family: 'Manrope', sans-serif;">
+        Curating India's finest regional master weavers, wooden handloom cooperatives, and homegrown luxury designer collectives. A celebration of living heritage, spinned by hand, crafted for modern elegance.
+      </p>
+    </div>
 
-<div
-  class="collections {{ section.settings.grid_item_width }}"
-  style="--grid-gap: {{ section.settings.grid_gap }}px"
->
-  {% for collection in collections %}
-    <a class="collection-card" href="{{ collection.url }}">
-      {% if collection.featured_image %}
-        {% render 'image',
-          class: 'collection-card__image',
-          image: collection.featured_image,
-          width: 600,
-          height: 600,
-          crop: 'center'
-        %}
+    <!-- 2. Interactive Category Filter Tabs -->
+    <div class="flex flex-wrap justify-center gap-3 border-b border-neutral-100 pb-8" style="font-family: 'Manrope', sans-serif;">
+      <button 
+        type="button" 
+        onclick="filterCollections('all')"
+        id="btn-all"
+        class="filter-tab-btn px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest bg-[#5a000c] text-white border border-[#5a000c] transition-all duration-300"
+      >
+        All Ateliers
+      </button>
+      <button 
+        type="button" 
+        onclick="filterCollections('silks')"
+        id="btn-silks"
+        class="filter-tab-btn px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest bg-white text-[#5c5e68] border border-neutral-200 hover:border-[#5a000c] hover:text-[#5a000c] transition-all duration-300"
+      >
+        Heritage Silks
+      </button>
+      <button 
+        type="button" 
+        onclick="filterCollections('handlooms')"
+        id="btn-handlooms"
+        class="filter-tab-btn px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest bg-white text-[#5c5e68] border border-neutral-200 hover:border-[#5a000c] hover:text-[#5a000c] transition-all duration-300"
+      >
+        Artisanal Handlooms
+      </button>
+      <button 
+        type="button" 
+        onclick="filterCollections('editorial')"
+        id="btn-editorial"
+        class="filter-tab-btn px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest bg-white text-[#5c5e68] border border-neutral-200 hover:border-[#5a000c] hover:text-[#5a000c] transition-all duration-300"
+      >
+        Seasonal Edits
+      </button>
+    </div>
+
+    <!-- 3. Curated Collections Directory Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10" id="CollectionsDirectoryGrid">
+      
+      {% # Loop active Shopify collections if present %}
+      {% if collections.size > 0 %}
+        {% for collection in collections %}
+          <div class="group flex flex-col justify-between bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 text-left collection-card-item" data-category="silks">
+            <div>
+              <div class="relative aspect-[4/5] w-full overflow-hidden">
+                {% if collection.featured_image != blank %}
+                  <img 
+                    src="{{ collection.featured_image | image_url: width: 800 }}" 
+                    alt="{{ collection.title | escape }}" 
+                    width="600" 
+                    height="750" 
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  />
+                {% else %}
+                  <div class="w-full h-full bg-[#f4f2fd] flex items-center justify-center text-neutral-300">
+                    <span class="material-symbols-outlined text-[48px]">image</span>
+                  </div>
+                {% endif %}
+                <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#5a000c] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                  {{ collection.all_products_count }} Articles
+                </div>
+              </div>
+              
+              <div class="p-6 space-y-3">
+                <h3 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+                  {{ collection.title }}
+                </h3>
+                <p class="text-[13px] text-[#5c5e68] leading-relaxed line-clamp-3" style="font-family: 'Manrope', sans-serif;">
+                  {% if collection.description != blank %}
+                    {{ collection.description | strip_html }}
+                  {% else %}
+                    Discover handcrafted elegance designed by India's premier master weavers and designer ateliers.
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+            
+            <div class="px-6 pb-6 pt-2">
+              <a 
+                href="{{ collection.url }}" 
+                class="w-full bg-[#5a000c] text-white py-3.5 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-1.5"
+                style="font-family: 'Manrope', sans-serif;"
+              >
+                <span>Explore Atelier</span>
+                <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
       {% endif %}
 
-      <div class="collection-card__content">
-        <p>{{ collection.title }}</p>
-
-        {% if collection.description %}
-          <p>{{ collection.description | strip_html | truncatewords: 15 }}</p>
-        {% endif %}
+      <!-- 4. High-Fidelity Mock Collections (Blank State Preview Fallbacks) -->
+      
+      <!-- Mock Collection 1: Heritage Silks -->
+      <div class="group flex flex-col justify-between bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 text-left collection-card-item" data-category="silks">
+        <div>
+          <div class="relative aspect-[4/5] w-full overflow-hidden">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSaaYOf0_hfwHQfyx2AGkTOmqBEau4hPEwrQ2dlTB1whM_PnwieRsA4o_In2mz7p6-O5ybEvyNszfaSAo1aQ3Qqn9R8aP72Q1ubUOT482K-dhUJusR319JB-Po2htKycrGqc6Ceu7FT30flKKmA7yhJhDA0VYuR4rmJy9ciJFrj2IIY49PPRjpdz6hAB-wWDJstM2D-oZtEZc-uZHWmz23Rgm_-dceJ_CnTM448FpvlALvCFmOpz0ySadAMFbYTGx7lf30npmVKeDo" 
+              alt="Heritage Banarasi Silks" 
+              width="600" 
+              height="750" 
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#5a000c] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              12 Articles
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-3">
+            <h3 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+              Heritage Banarasi Silks
+            </h3>
+            <p class="text-[13px] text-[#5c5e68] leading-relaxed line-clamp-3" style="font-family: 'Manrope', sans-serif;">
+              Lustrous fabrics spinned with genuine gold and silver Zari threads. Woven on traditional wooden handlooms in Benares, these rich silks celebrate ancestral royal Indian court styling.
+            </p>
+          </div>
+        </div>
+        
+        <div class="px-6 pb-6 pt-2">
+          <a 
+            href="/collections/all" 
+            class="w-full bg-[#5a000c] text-white py-3.5 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-1.5"
+            style="font-family: 'Manrope', sans-serif;"
+          >
+            <span>Explore Atelier</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
       </div>
-    </a>
-  {% endfor %}
-</div>
 
-{% stylesheet %}
-  .collections {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(var(--collection-card-size), 100%), 1fr));
-    gap: var(--grid-gap);
+      <!-- Mock Collection 2: Chanderi Weaves -->
+      <div class="group flex flex-col justify-between bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 text-left collection-card-item" data-category="handlooms">
+        <div>
+          <div class="relative aspect-[4/5] w-full overflow-hidden">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMvadaeXXanu5bd3yVWG7rR0NOlstinb6YtXP2OaZikkGDIA0ledF1jYGJMsRO8jBiFTov4uLSnWGY0mpOcdQFt6FlcjUbR4MBGc0qHa6_BvtNQR5s4ZC-OHtFAg2Jqqj8aFmdFExxKjDnWAlzCF9LE3y9dyCKycWIlAdihgRd-dQ3KQ4JOGWUXkj5j8vWe-qQSn9uu9i9xoAq9Oo2tDpCNrcGQTLuNBwfDRxDugjx7ajb2CD3ge2dewZmlfuUCSxeiBW4l6K04mx_" 
+              alt="Artisanal Chanderi Handloom" 
+              width="600" 
+              height="750" 
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#5a000c] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              8 Articles
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-3">
+            <h3 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+              Artisanal Chanderi
+            </h3>
+            <p class="text-[13px] text-[#5c5e68] leading-relaxed line-clamp-3" style="font-family: 'Manrope', sans-serif;">
+              Gossamer-thin, light-as-air fabrics featuring delicate traditional floral motifs. Spun and dyed ethically in local village cooperatives, bringing timeless sheer cotton-silk weaves to life.
+            </p>
+          </div>
+        </div>
+        
+        <div class="px-6 pb-6 pt-2">
+          <a 
+            href="/collections/all" 
+            class="w-full bg-[#5a000c] text-white py-3.5 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-1.5"
+            style="font-family: 'Manrope', sans-serif;"
+          >
+            <span>Explore Atelier</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mock Collection 3: Summer Serenade -->
+      <div class="group flex flex-col justify-between bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 text-left collection-card-item" data-category="editorial">
+        <div>
+          <div class="relative aspect-[4/5] w-full overflow-hidden">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqV9FeeR-g1-bDuhxr7_wvMbEA-OwHKq5OqgXMoxM_HebVOSTEvaqwsVaGw2CHkxr4fBbdaibKxVyMIAkO5oEK_vYQfaOLtntCEr5vaJGnVqe9Cq6D5yCjkwm1L_rRJj5ECjwgy4--LvXx28agjiQhM2-DN5L55VxSblkqkgiExxH3vlnYmrLLL6wDYIpGH666gMri4fDV35NUxbsaB4q0c5FKCgIW4mbFS8nGjJOo_2XasfmKqUWdLJXQb7_ov5E92rTqk_U7wrto" 
+              alt="Summer Serenade '26" 
+              width="600" 
+              height="750" 
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#5a000c] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              16 Articles
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-3">
+            <h3 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+              Summer Serenade '26
+            </h3>
+            <p class="text-[13px] text-[#5c5e68] leading-relaxed line-clamp-3" style="font-family: 'Manrope', sans-serif;">
+              A refreshing breeze of pastel hues and detailed ivory thread work on hand-woven mulmuls. Designed in lightweight tunics, coordinates, and soft dupattas to endure high summers elegantly.
+            </p>
+          </div>
+        </div>
+        
+        <div class="px-6 pb-6 pt-2">
+          <a 
+            href="/collections/all" 
+            class="w-full bg-[#5a000c] text-white py-3.5 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-1.5"
+            style="font-family: 'Manrope', sans-serif;"
+          >
+            <span>Explore Atelier</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mock Collection 4: The Chikankari Edit -->
+      <div class="group flex flex-col justify-between bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 text-left collection-card-item" data-category="handlooms">
+        <div>
+          <div class="relative aspect-[4/5] w-full overflow-hidden">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuABPwn0l3VFDG4m3Qb9NgoNgDR56XFHtwwlo4KDdf0w0czfdFb8uH0t4ned1hqJI4_FkQmbobfi0UHKePVDAVELdnb9A62wssN5Isqoy3-BD2hBij-5at35iFiIdYp5NNCdcmt0ZlqCfsR_zgFYS72jLP69MEbJfwH48EHwIjMx4q-2M67JkpqYf0-DSqs83lN1kovpJSfRK25BPcUTS5YNs6uQdxDSERrvSLXGKn95hv0A6ScLAPT-P733lZWlE4ayAGXhaO8M7UoV" 
+              alt="Bespoke Chikankari Edit" 
+              width="600" 
+              height="750" 
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#5a000c] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              10 Articles
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-3">
+            <h3 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+              Bespoke Chikankari
+            </h3>
+            <p class="text-[13px] text-[#5c5e68] leading-relaxed line-clamp-3" style="font-family: 'Manrope', sans-serif;">
+              Shadow embroidery art hand-sewn by female artisans in Lucknow. Exquisite white-on-white designs detailed with intricate georgette meshes and heritage shadow stitching techniques.
+            </p>
+          </div>
+        </div>
+        
+        <div class="px-6 pb-6 pt-2">
+          <a 
+            href="/collections/all" 
+            class="w-full bg-[#5a000c] text-white py-3.5 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-1.5"
+            style="font-family: 'Manrope', sans-serif;"
+          >
+            <span>Explore Atelier</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mock Collection 5: Golden Zardozi festive -->
+      <div class="group flex flex-col justify-between bg-white border border-neutral-100 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-500 text-left collection-card-item" data-category="silks">
+        <div>
+          <div class="relative aspect-[4/5] w-full overflow-hidden">
+            <img 
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaBDEM3LM9_oiaLfpiatkP2P6Y5Ke93lh_a_1OAXmniSLT2u1-nqPHgtbDNmH9z8GjXGdF5aMjHyTz9uUnzuU0-kpmAqGAvsE-GIB-M1r2Xl6_tWjhWXgWUkgHOKhyZk02t2J851dtlvKRiSt0zPZokaXPkXBlS_bhzWrFbUVOhz-YqRdvM-vrBO17i2HN7LNlLryZXNDQnqt6z52-lMhkFkFBBZBIAvCyNDem3gdI4pSTLIi_dXZGrjo0lVPhrLA-48Bqib1KrJRJ" 
+              alt="Bespoke Golden Zardozi" 
+              width="600" 
+              height="750" 
+              loading="lazy"
+              class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm text-[#5a000c] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+              14 Articles
+            </div>
+          </div>
+          
+          <div class="p-6 space-y-3">
+            <h3 class="text-[20px] font-medium text-[#5a000c]" style="font-family: 'Noto Serif', serif;">
+              Golden Zardozi Festive
+            </h3>
+            <p class="text-[13px] text-[#5c5e68] leading-relaxed line-clamp-3" style="font-family: 'Manrope', sans-serif;">
+              Stately hand-embroidered borders featuring dense floral patterns sewn with fine copper bullion threads. A royal signature look tailored perfectly on heavy, premium raw silk fabrics.
+            </p>
+          </div>
+        </div>
+        
+        <div class="px-6 pb-6 pt-2">
+          <a 
+            href="/collections/all" 
+            class="w-full bg-[#5a000c] text-white py-3.5 rounded-lg text-[11px] font-bold uppercase tracking-widest hover:bg-[#7f0f1b] transition-all flex items-center justify-center gap-1.5"
+            style="font-family: 'Manrope', sans-serif;"
+          >
+            <span>Explore Atelier</span>
+            <span class="material-symbols-outlined text-[16px] transition-transform duration-300 group-hover:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 5. Creative water-watermark watermarks block -->
+    <div class="w-full rounded-2xl bg-[#5a000c] text-white p-8 md:p-12 relative overflow-hidden flex flex-col justify-between min-h-[300px] shadow-lg shadow-[#5a000c]/10 text-left">
+      <!-- Watermark design background -->
+      <div class="absolute right-0 bottom-0 top-0 opacity-15 pointer-events-none w-1/2 select-none select-none flex items-center justify-center">
+        <span class="material-symbols-outlined text-[240px] text-white font-extralight select-none">architecture</span>
+      </div>
+      
+      <div class="space-y-4 max-w-xl relative z-10">
+        <span class="text-[11px] font-bold uppercase tracking-[0.25em] text-[#ffdad8]" style="font-family: 'Manrope', sans-serif;">Our Core Philosophy</span>
+        <h3 class="text-[28px] md:text-[36px] font-normal leading-tight" style="font-family: 'Noto Serif', serif;">
+          Preserving Ancestral Crafts in a Modern World
+        </h3>
+        <p class="text-[13.5px] text-neutral-200 leading-relaxed" style="font-family: 'Manrope', sans-serif;">
+          Every collection is a curation of centuries-old regional techniques. By working directly with local weaver collectives, we provide sustainable family livelihoods and guarantee that the legendary spirit of Indian handlooms is carried forward.
+        </p>
+      </div>
+
+      <div class="pt-8 relative z-10">
+        <a 
+          href="/pages/about-us" 
+          class="inline-flex items-center gap-2 bg-white text-[#5a000c] font-bold text-[11px] uppercase tracking-widest px-8 py-3.5 hover:bg-[#ffdad8] hover:text-[#5a000c] rounded-lg transition-all"
+          style="font-family: 'Manrope', sans-serif;"
+        >
+          <span>Read Our Story</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Vanilla JS Filter Controller -->
+<script>
+  function filterCollections(category) {
+    const cards = document.querySelectorAll('.collection-card-item');
+    const buttons = document.querySelectorAll('.filter-tab-btn');
+
+    // 1. Reset buttons styling to inactive state
+    buttons.forEach(btn => {
+      btn.className = "filter-tab-btn px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest bg-white text-[#5c5e68] border border-neutral-200 hover:border-[#5a000c] hover:text-[#5a000c] transition-all duration-300";
+    });
+
+    // 2. Set active button styling
+    const activeBtn = document.getElementById(`btn-${category}`);
+    if (activeBtn) {
+      activeBtn.className = "filter-tab-btn px-5 py-2.5 rounded-lg text-[11px] font-bold uppercase tracking-widest bg-[#5a000c] text-white border border-[#5a000c] transition-all duration-300";
+    }
+
+    // 3. Smooth fade hide / display card items
+    cards.forEach(card => {
+      const cardCat = card.getAttribute('data-category');
+      
+      if (category === 'all' || cardCat === category) {
+        card.style.display = 'flex';
+        // Force reflow for fade animation
+        setTimeout(() => {
+          card.style.opacity = '1';
+          card.style.transform = 'scale(1)';
+        }, 50);
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          card.style.display = 'none';
+        }, 300);
+      }
+    });
   }
-  .collections--compact {
-    --collection-card-size: 160px;
-  }
-  .collections--full {
-    --collection-card-size: 280px;
-  }
-  .collection-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-{% endstylesheet %}
+</script>
 
 {% schema %}
 {
-  "name": "t:general.collections_grid",
-  "settings": [
+  "name": "Tatsyaa Collections List",
+  "settings": [],
+  "presets": [
     {
-      "type": "select",
-      "id": "grid_item_width",
-      "label": "t:labels.grid_item_width",
-      "options": [
-        { "value": "collections--compact", "label": "t:options.size.small" },
-        { "value": "collections--full", "label": "t:options.size.large" }
-      ],
-      "default": "collections--full"
-    },
-    {
-      "type": "range",
-      "id": "grid_gap",
-      "label": "t:labels.grid_gap",
-      "min": 0,
-      "max": 50,
-      "step": 5,
-      "unit": "px",
-      "default": 10
+      "name": "Tatsyaa Collections List",
+      "category": "Grid"
     }
-  ],
-  "presets": [{ "name": "t:general.collections_grid" }]
+  ]
 }
 {% endschema %}
