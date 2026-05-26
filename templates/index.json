@@ -1,28 +1,70 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "tatsyaa-hero",
-      "settings": {}
+      "settings": {
+        "badge_text": "Established Excellence",
+        "title": "Timeless Artistry for theModern Woman",
+        "alignment_class": "justify-center text-center",
+        "layout_alignment_class": "items-center",
+        "btn1_text": "Shop the Collection",
+        "btn1_link": "shopify://collections",
+        "btn2_text": "View Lookbook",
+        "btn2_link": ""
+      }
     },
     "philosophy": {
       "type": "tatsyaa-philosophy",
-      "settings": {}
+      "settings": {
+        "image_position": "left",
+        "badge": "Our Philosophy",
+        "title": "Curating India's Finest Homegrown Designers",
+        "body_text_1": "Tatsyaa is born from a desire to bridge the gap between ancient Indian craftsmanship and the discerning modern woman. We travel to the heart of India's textile hubs, partnering with master weavers and contemporary designers who breathe new life into heritage techniques.",
+        "body_text_2": "Each piece in our collection is a labor of love, representing hours of meticulous embroidery, hand-dyeing, and precision tailoring. We don't just sell clothes; we narrate stories of cultural resilience and artistic evolution.",
+        "link_text": "Read Our Story",
+        "link_url": "shopify://pages/about-us"
+      }
     },
     "featured_collections": {
       "type": "tatsyaa-featured-collections",
-      "settings": {}
+      "settings": {
+        "title": "Curated Edits",
+        "subheading": "Discover the essence of modern heritage through our selected themes."
+      }
     },
     "trending": {
       "type": "tatsyaa-trending",
-      "settings": {}
+      "settings": {
+        "title": "Trending Now",
+        "subheading": "The pieces defining the season's silhouette.",
+        "collection": ""
+      }
     },
     "testimonial": {
       "type": "tatsyaa-testimonial",
-      "settings": {}
+      "settings": {
+        "quote": "Tatsyaa represents everything I look for in modern Indian wear. The craftsmanship is impeccable, yet the silhouettes are wearable and globally relevant. It's heritage reinvented for today's woman.",
+        "author_name": "Ananya Malhotra",
+        "author_title": "Fashion Consultant, Mumbai"
+      }
     },
     "newsletter": {
       "type": "tatsyaa-newsletter",
-      "settings": {}
+      "settings": {
+        "title": "The Tatsyaa Circle",
+        "subheading": "Join our exclusive community for early access to new collections, artisanal stories, and private events.",
+        "placeholder": "Enter your email address",
+        "button_text": "Subscribe"
+      }
     }
   },
   "order": [
