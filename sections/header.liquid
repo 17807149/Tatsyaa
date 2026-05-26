@@ -92,7 +92,7 @@
 
         <a class="text-neutral-600 hover:text-primary transition-colors relative flex items-center justify-center" href="{{ routes.cart_url }}" aria-label="Shopping Bag">
           <span class="material-symbols-outlined text-[24px]">shopping_bag</span>
-          <span class="absolute -top-1 -right-1.5 bg-[#5a000c] text-white text-[9px] w-4.5 h-4.5 flex items-center justify-center rounded-full font-bold">
+          <span class="absolute -top-1.5 -right-2 bg-[#ffdad8] text-[#5a000c] text-[9.5px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-sm">
             {% if cart.item_count > 0 %}{{ cart.item_count }}{% else %}2{% endif %}
           </span>
         </a>
