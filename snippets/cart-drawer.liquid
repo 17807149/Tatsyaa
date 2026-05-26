@@ -24,11 +24,11 @@
 <button 
   type="button" 
   id="TatsyaaFloatingCartBtn" 
-  class="fixed right-6 bottom-24 z-40 bg-[#5a000c] text-white p-4 rounded-lg shadow-lg hover:bg-[#7f0f1b] transition-all flex items-center justify-center hover:scale-105 duration-300"
+  class="fixed right-6 bottom-22 z-40 bg-[#5a000c] text-white w-12 h-12 rounded-full shadow-xl hover:bg-[#7f0f1b] transition-all flex items-center justify-center hover:scale-105 duration-300"
   aria-label="Open Cart Bag Drawer"
 >
   <span class="material-symbols-outlined text-[24px]">shopping_bag</span>
-  <span class="absolute -top-1.5 -right-1.5 bg-[#ffdad8] text-[#5a000c] text-[9.5px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-sm" id="FloatingCartCount">
+  <span class="absolute -top-1 -right-1 bg-[#ffdad8] text-[#5a000c] text-[9.5px] w-5 h-5 flex items-center justify-center rounded-full font-bold shadow-sm" id="FloatingCartCount">
     {% if cart.item_count > 0 %}{{ cart.item_count }}{% else %}2{% endif %}
   </span>
 </button>
