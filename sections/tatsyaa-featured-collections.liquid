@@ -35,15 +35,15 @@
           <a href="{{ block.settings.link_url | default: '#' }}" class="block">
             <div class="relative aspect-[3/4] overflow-hidden mb-6">
               {% if block.settings.image %}
-                {{ block.settings.image | image_url: width: 800 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110', loading: 'lazy' }}
+                {{ block.settings.image | image_url: width: 800 | image_tag: class: 'w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110', loading: 'lazy' }}
               {% else %}
                 {% # High-Fidelity Fallback Image per Block Index %}
                 {% if forloop.index == 1 %}
-                  <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="New Arrivals" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqV9FeeR-g1-bDuhxr7_wvMbEA-OwHKq5OqgXMoxM_HebVOSTEvaqwsVaGw2CHkxr4fBbdaibKxVyMIAkO5oEK_vYQfaOLtntCEr5vaJGnVqe9Cq6D5yCjkwm1L_rRJj5ECjwgy4--LvXx28agjiQhM2-DN5L55VxSblkqkgiExxH3vlnYmrLLL6wDYIpGH666gMri4fDV35NUxbsaB4q0c5FKCgIW4mbFS8nGjJOo_2XasfmKqUWdLJXQb7_ov5E92rTqk_U7wrto"/>
+                  <img class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="New Arrivals" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqV9FeeR-g1-bDuhxr7_wvMbEA-OwHKq5OqgXMoxM_HebVOSTEvaqwsVaGw2CHkxr4fBbdaibKxVyMIAkO5oEK_vYQfaOLtntCEr5vaJGnVqe9Cq6D5yCjkwm1L_rRJj5ECjwgy4--LvXx28agjiQhM2-DN5L55VxSblkqkgiExxH3vlnYmrLLL6wDYIpGH666gMri4fDV35NUxbsaB4q0c5FKCgIW4mbFS8nGjJOo_2XasfmKqUWdLJXQb7_ov5E92rTqk_U7wrto"/>
                 {% elsif forloop.index == 2 %}
-                  <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="Handloom Specials" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMvadaeXXanu5bd3yVWG7rR0NOlstinb6YtXP2OaZikkGDIA0ledF1jYGJMsRO8jBiFTov4uLSnWGY0mpOcdQFt6FlcjUbR4MBGc0qHa6_BvtNQR5s4ZC-OHtFAg2Jqqj8aFmdFExxKjDnWAlzCF9LE3y9dyCKycWIlAdihgRd-dQ3KQ4JOGWUXkj5j8vWe-qQSn9uu9i9xoAq9Oo2tDpCNrcGQTLuNBwfDRxDugjx7ajb2CD3ge2dewZmlfuUCSxeiBW4l6K04mx_"/>
+                  <img class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="Handloom Specials" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMvadaeXXanu5bd3yVWG7rR0NOlstinb6YtXP2OaZikkGDIA0ledF1jYGJMsRO8jBiFTov4uLSnWGY0mpOcdQFt6FlcjUbR4MBGc0qHa6_BvtNQR5s4ZC-OHtFAg2Jqqj8aFmdFExxKjDnWAlzCF9LE3y9dyCKycWIlAdihgRd-dQ3KQ4JOGWUXkj5j8vWe-qQSn9uu9i9xoAq9Oo2tDpCNrcGQTLuNBwfDRxDugjx7ajb2CD3ge2dewZmlfuUCSxeiBW4l6K04mx_"/>
                 {% else %}
-                  <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="Heritage Silks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSaaYOf0_hfwHQfyx2AGkTOmqBEau4hPEwrQ2dlTB1whM_PnwieRsA4o_In2mz7p6-O5ybEvyNszfaSAo1aQ3Qqn9R8aP72Q1ubUOT482K-dhUJusR319JB-Po2htKycrGqc6Ceu7FT30flKKmA7yhJhDA0VYuR4rmJy9ciJFrj2IIY49PPRjpdz6hAB-wWDJstM2D-oZtEZc-uZHWmz23Rgm_-dceJ_CnTM448FpvlALvCFmOpz0ySadAMFbYTGx7lf30npmVKeDo"/>
+                  <img class="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110" width="600" height="800" alt="Heritage Silks" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSaaYOf0_hfwHQfyx2AGkTOmqBEau4hPEwrQ2dlTB1whM_PnwieRsA4o_In2mz7p6-O5ybEvyNszfaSAo1aQ3Qqn9R8aP72Q1ubUOT482K-dhUJusR319JB-Po2htKycrGqc6Ceu7FT30flKKmA7yhJhDA0VYuR4rmJy9ciJFrj2IIY49PPRjpdz6hAB-wWDJstM2D-oZtEZc-uZHWmz23Rgm_-dceJ_CnTM448FpvlALvCFmOpz0ySadAMFbYTGx7lf30npmVKeDo"/>
                 {% endif %}
               {% endif %}
               <div class="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-all"></div>

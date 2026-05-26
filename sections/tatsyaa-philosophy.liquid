@@ -16,17 +16,17 @@
     <div class="relative {% if section.settings.image_position == 'right' %}lg:order-last{% endif %}" data-aos="fade-right">
       <div class="aspect-[4/5] bg-surface-container-high relative overflow-hidden">
         {% if section.settings.main_image %}
-          {{ section.settings.main_image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover transition-all duration-700 hover:scale-105', loading: 'lazy' }}
+          {{ section.settings.main_image | image_url: width: 1200 | image_tag: class: 'w-full h-full object-cover object-top transition-all duration-700 hover:scale-105', loading: 'lazy' }}
         {% else %}
-          <img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" width="1200" height="1500" alt="Main Philosophy Image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsyBvpd-qdJYbAsxa0MTetaGfVhWqBpN5tK_8fgIzeUuGExXhfpXgQYuBfNEntWD8z2FCD6ybmsac0NmSgQgJtAkLWCaE3fehAATSGgH6CEREqc0GisvIU2brFFbJPEMsNR6lwvCgthzeZB_cq1A92vNVaa4QR2b9Z7OmTbHfWg3wwFJLOAnszC3hqa8yiO1rYCNwMHTAV0O6Hfrcn3KVpW7YTm6cQUC6K3tKEq1Nw5Z0YOTk19R3Cnk3cYvMl8-rhlNTWf9gKD6TW"/>
+          <img class="w-full h-full object-cover object-top grayscale-[0.2] hover:grayscale-0 transition-all duration-700" width="1200" height="1500" alt="Main Philosophy Image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsyBvpd-qdJYbAsxa0MTetaGfVhWqBpN5tK_8fgIzeUuGExXhfpXgQYuBfNEntWD8z2FCD6ybmsac0NmSgQgJtAkLWCaE3fehAATSGgH6CEREqc0GisvIU2brFFbJPEMsNR6lwvCgthzeZB_cq1A92vNVaa4QR2b9Z7OmTbHfWg3wwFJLOAnszC3hqa8yiO1rYCNwMHTAV0O6Hfrcn3KVpW7YTm6cQUC6K3tKEq1Nw5Z0YOTk19R3Cnk3cYvMl8-rhlNTWf9gKD6TW"/>
         {% endif %}
       </div>
       
       <div class="absolute -bottom-10 -right-10 hidden lg:block w-64 h-80 bg-surface-container-lowest border border-outline-variant/30 p-2 shadow-sm">
         {% if section.settings.secondary_image %}
-          {{ section.settings.secondary_image | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover', loading: 'lazy' }}
+          {{ section.settings.secondary_image | image_url: width: 600 | image_tag: class: 'w-full h-full object-cover object-top', loading: 'lazy' }}
         {% else %}
-          <img class="w-full h-full object-cover" width="600" height="800" alt="Secondary Weave Image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDUXzZjoRcxB2UGKt4RgBIRxiKJmsYs5uYPn_x-1xLffwC_7bFLzu-g3fvn8i2QQyiV3ninuE577tStUD70yVL2yU8wPDEmnB3Ru7wvp1v5VZsrIYlzjqvCXR8pG1ZUatJ4kp9jHnyB-4BKIAKiDdZ0JyPXSpCk2aQBeeDpWSNFwKnQhd7ROoCD0wijXpGBuMEjCot_Q7O7bn8lHE1vvrkfxrxuWIup58wgKvr-PuxH5prJ17ROMXpnrCGrjB_xKrOqT3lntXnOCZs"/>
+          <img class="w-full h-full object-cover object-top" width="600" height="800" alt="Secondary Weave Image" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBDUXzZjoRcxB2UGKt4RgBIRxiKJmsYs5uYPn_x-1xLffwC_7bFLzu-g3fvn8i2QQyiV3ninuE577tStUD70yVL2yU8wPDEmnB3Ru7wvp1v5VZsrIYlzjqvCXR8pG1ZUatJ4kp9jHnyB-4BKIAKiDdZ0JyPXSpCk2aQBeeDpWSNFwKnQhd7ROoCD0wijXpGBuMEjCot_Q7O7bn8lHE1vvrkfxrxuWIup58wgKvr-PuxH5prJ17ROMXpnrCGrjB_xKrOqT3lntXnOCZs"/>
         {% endif %}
       </div>
     </div>

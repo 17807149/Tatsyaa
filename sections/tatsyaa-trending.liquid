@@ -49,7 +49,7 @@
           <div class="min-w-[280px] md:min-w-[320px] flex-shrink-0 group snap-start">
             <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
               {% if product.featured_image %}
-                {{ product.featured_image | image_url: width: 850 | image_tag: class: 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
+                {{ product.featured_image | image_url: width: 850 | image_tag: class: 'w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105', loading: 'lazy' }}
               {% endif %}
               <a href="{{ product.url }}" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 text-primary px-6 py-2 text-label-md uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">
                 Quick View
@@ -70,7 +70,7 @@
         <!-- Fallback Product 1 -->
         <div class="min-w-[280px] md:min-w-[320px] flex-shrink-0 group snap-start">
           <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
-            <img class="w-full h-full object-cover" width="320" height="426" alt="Anya Lace Tunic Set" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABPwn0l3VFDG4m3Qb9NgoNgDR56XFHtwwlo4KDdf0w0czfdFb8uH0t4ned1hqJI4_FkQmbobfi0UHKePVDAVELdnb9A62wssN5Isqoy3-BD2hBij-5at35iFiIdYp5NNCdcmt0ZlqCfsR_zgFYS72jLP69MEbJfwH48EHwIjMx4q-2M67JkpqYf0-DSqs83lN1kovpJSfRK25BPcUTS5YNs6uQdxDSERrvSLXGKn95hv0A6ScLAPT-P733lZWlE4ayAGXhaO8M7UoV"/>
+            <img class="w-full h-full object-cover object-top" width="320" height="426" alt="Anya Lace Tunic Set" src="https://lh3.googleusercontent.com/aida-public/AB6AXuABPwn0l3VFDG4m3Qb9NgoNgDR56XFHtwwlo4KDdf0w0czfdFb8uH0t4ned1hqJI4_FkQmbobfi0UHKePVDAVELdnb9A62wssN5Isqoy3-BD2hBij-5at35iFiIdYp5NNCdcmt0ZlqCfsR_zgFYS72jLP69MEbJfwH48EHwIjMx4q-2M67JkpqYf0-DSqs83lN1kovpJSfRK25BPcUTS5YNs6uQdxDSERrvSLXGKn95hv0A6ScLAPT-P733lZWlE4ayAGXhaO8M7UoV"/>
             <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 text-primary px-6 py-2 text-label-md uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">Quick View</button>
           </div>
           <div class="text-center">
@@ -78,11 +78,11 @@
             <p class="text-body-md font-body-md text-outline">₹12,500</p>
           </div>
         </div>
-
+ 
         <!-- Fallback Product 2 -->
         <div class="min-w-[280px] md:min-w-[320px] flex-shrink-0 group snap-start">
           <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
-            <img class="w-full h-full object-cover" width="320" height="426" alt="Meera Silk Waistcoat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfcKJMO4Ndp7BDje8i1plFA5yaxrizYF1gghwLktFbjnNIUJ24Tpfaaj4YvVn3WrTbv-8wHFtEyRI5aeGohaOqcAGuqRxemr1Hee21I5E7tyhJ2SOVKHPeAIlAqs8an41ZKQqFuPRJzlXU7Km4LowVFoUyQIY1FwJVvBQ4rvjgYF7sTlSXj5tlUqwW37i9ASV2NkqO80EnV9M3kjW_lCdsof9L6EMWlNgOOruU-nxjlGO9VxjRv-3yPKWhMrXbgxJJZ86OC51JvsjQ"/>
+            <img class="w-full h-full object-cover object-top" width="320" height="426" alt="Meera Silk Waistcoat" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfcKJMO4Ndp7BDje8i1plFA5yaxrizYF1gghwLktFbjnNIUJ24Tpfaaj4YvVn3WrTbv-8wHFtEyRI5aeGohaOqcAGuqRxemr1Hee21I5E7tyhJ2SOVKHPeAIlAqs8an41ZKQqFuPRJzlXU7Km4LowVFoUyQIY1FwJVvBQ4rvjgYF7sTlSXj5tlUqwW37i9ASV2NkqO80EnV9M3kjW_lCdsof9L6EMWlNgOOruU-nxjlGO9VxjRv-3yPKWhMrXbgxJJZ86OC51JvsjQ"/>
             <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 text-primary px-6 py-2 text-label-md uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">Quick View</button>
           </div>
           <div class="text-center">
@@ -90,11 +90,11 @@
             <p class="text-body-md font-body-md text-outline">₹8,900</p>
           </div>
         </div>
-
+ 
         <!-- Fallback Product 3 -->
         <div class="min-w-[280px] md:min-w-[320px] flex-shrink-0 group snap-start">
           <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
-            <img class="w-full h-full object-cover" width="320" height="426" alt="Gul Embroidered Suit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCCzH7Z-cSG3pKhMnkWXdUuinfi0kXKtbBrKB9VNIg6KhigZc1kEtDHCaK0aNiK14eWThga0us8VqanoeujJCbHXG_96E0_OJk9Bju8P8QtNb-gX4R8f4lZahnVe-BVlxcPHzRMp4Eeo3475xuuQxZC6w9RR8oGL4EhvxXjy30ElaynjEw1h4t7lqWoRiuwrzCRwhBGNA7mC-MEQ7mflo4pf2EPWnBTBjqkDn4VOabVuLVp9CUmYKj3wbzHghB9Ox1RVelGRJkioN"/>
+            <img class="w-full h-full object-cover object-top" width="320" height="426" alt="Gul Embroidered Suit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtCCzH7Z-cSG3pKhMnkWXdUuinfi0kXKtbBrKB9VNIg6KhigZc1kEtDHCaK0aNiK14eWThga0us8VqanoeujJCbHXG_96E0_OJk9Bju8P8QtNb-gX4R8f4lZahnVe-BVlxcPHzRMp4Eeo3475xuuQxZC6w9RR8oGL4EhvxXjy30ElaynjEw1h4t7lqWoRiuwrzCRwhBGNA7mC-MEQ7mflo4pf2EPWnBTBjqkDn4VOabVuLVp9CUmYKj3wbzHghB9Ox1RVelGRJkioN"/>
             <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 text-primary px-6 py-2 text-label-md uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">Quick View</button>
           </div>
           <div class="text-center">
@@ -102,11 +102,11 @@
             <p class="text-body-md font-body-md text-outline">₹14,200</p>
           </div>
         </div>
-
+ 
         <!-- Fallback Product 4 -->
         <div class="min-w-[280px] md:min-w-[320px] flex-shrink-0 group snap-start">
           <div class="relative aspect-[3/4] overflow-hidden bg-surface-container mb-4">
-            <img class="w-full h-full object-cover" width="320" height="426" alt="Vanya Organza Dupatta" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbz0u0MEUp_fSROW6SPFPhsCxNCuSKILO77eexU34k2k1D87xsGtxHY-l7kRqACILfdzu6Q-5XpQY3BWNi8w2mpLLrr5hsAAZa3vTjvHFZH-tmda82c6MtEWuxS43thX2Ldd3WVsSfPRO5uvySufvOrdELPhbL-naKq6ktz6A2xMwrR5wRZG7jC_15IgbSRyaNsw5MMPs8rkaPvpzjuoq2bTpqgv8GG-0s12kaMawX20hDrVDwRRUta8nB2GNcu3wOSyWKRklUnpbI"/>
+            <img class="w-full h-full object-cover object-top" width="320" height="426" alt="Vanya Organza Dupatta" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAbz0u0MEUp_fSROW6SPFPhsCxNCuSKILO77eexU34k2k1D87xsGtxHY-l7kRqACILfdzu6Q-5XpQY3BWNi8w2mpLLrr5hsAAZa3vTjvHFZH-tmda82c6MtEWuxS43thX2Ldd3WVsSfPRO5uvySufvOrdELPhbL-naKq6ktz6A2xMwrR5wRZG7jC_15IgbSRyaNsw5MMPs8rkaPvpzjuoq2bTpqgv8GG-0s12kaMawX20hDrVDwRRUta8nB2GNcu3wOSyWKRklUnpbI"/>
             <button class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/95 text-primary px-6 py-2 text-label-md uppercase opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-lg">Quick View</button>
           </div>
           <div class="text-center">
